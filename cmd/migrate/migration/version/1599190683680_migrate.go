@@ -5,9 +5,9 @@ import (
 
 	"gorm.io/gorm"
 
-	"go-admin/app/admin/models"
 	"go-admin/cmd/migrate/migration"
 	common "go-admin/common/models"
+	"go-admin/pkg/models"
 )
 
 func init() {

@@ -43,7 +43,6 @@ func (e *Customer) GetPage() (customers []Customer, err error) {
 
 //添加
 func (e *Customer) Insert() (id int, err error) {
-
 	// check 用户名
 	var count int64
 	orm.Eloquent.Table(e.TableName()).Where("dept_id = ? AND name = ?", e.DeptId, e.Name).Count(&count)
@@ -83,20 +82,6 @@ func (e *Customer) UpdateAmount(id int) (update Customer, err error) {
 	if err = orm.Eloquent.Table(e.TableName()).First(&update, id).Error; err != nil {
 		return
 	}
-	tx := orm.Eloquent.Set("gorm:query_option", "FOR UPDATE")
-	if err = tx.Table(e.TableName()).First(&update, id).Error; err != nil {
-		return
-	}
-	if err = tx.Exec("UPDATE customer SET amount = amount+? WHERE id = ?", e.Amount, id).Error; err != nil {
-		tx.Rollback()
-		return
-	}
-	tx.Commit()
-	return
-}
-
-//修改余额
-func (e *Customer) BatchUpdateAmount(updates []Customer) (update Customer, err error) {
 	tx := orm.Eloquent.Set("gorm:query_option", "FOR UPDATE")
 	if err = tx.Table(e.TableName()).First(&update, id).Error; err != nil {
 		return

@@ -3,7 +3,7 @@ package gorm
 import (
 	"gorm.io/gorm"
 
-	"go-admin/app/admin/models"
+	"go-admin/pkg/models"
 )
 
 func InitData(db *gorm.DB) {

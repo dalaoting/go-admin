@@ -7,8 +7,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"go-admin/app/admin/models"
 	"go-admin/common/global"
+	"go-admin/pkg/models"
 	"go-admin/tools"
 	config2 "go-admin/tools/config"
 )

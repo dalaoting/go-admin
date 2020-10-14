@@ -6,7 +6,7 @@ import (
 	common "go-admin/common/models"
 	"net/http"
 
-	"go-admin/app/admin/models"
+	"go-admin/pkg/models"
 	"go-admin/app/admin/service/dto"
 	"go-admin/common/actions"
 	"go-admin/common/apis"

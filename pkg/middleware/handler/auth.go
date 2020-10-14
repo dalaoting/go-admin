@@ -7,9 +7,9 @@ import (
 	"github.com/mojocn/base64Captcha"
 	"github.com/mssola/user_agent"
 
-	"go-admin/app/admin/models"
 	"go-admin/common/global"
 	jwt "go-admin/pkg/jwtauth"
+	"go-admin/pkg/models"
 	"go-admin/tools"
 	"go-admin/tools/config"
 )

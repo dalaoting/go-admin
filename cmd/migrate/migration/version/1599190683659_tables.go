@@ -5,10 +5,10 @@ import (
 
 	"gorm.io/gorm"
 
-	"go-admin/app/admin/models"
-	"go-admin/app/admin/models/tools"
 	"go-admin/cmd/migrate/migration"
 	common "go-admin/common/models"
+	"go-admin/pkg/models"
+	"go-admin/pkg/models/tools"
 )
 
 func init() {

@@ -3,8 +3,8 @@ package tools
 import (
 	"strings"
 
-	"go-admin/app/admin/models"
 	orm "go-admin/common/global"
+	"go-admin/pkg/models"
 )
 
 type SysTables struct {

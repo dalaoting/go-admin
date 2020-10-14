@@ -19,30 +19,12 @@ type CustomerLog struct {
 	DataScope string `json:"dataScope" gorm:"-"`
 }
 
-func (*Customer) TableName() string {
-	return "customer"
-}
-
-func (e *Customer) GetPage() (customers []Customer, err error) {
-	table := orm.Eloquent.Table(e.TableName())
-	if e.DeptId <= 0 {
-		return nil, errors.New("请先加入企业")
-	}
-
-	table = table.Where("dept_id = ?", e.DeptId)
-
-	if e.Name != "" {
-		table = table.Where("name = ?", e.Name)
-	}
-
-	if err = table.Order("amount DESC").Find(&customers).Error; err != nil {
-		return
-	}
-	return
+func (*CustomerLog) TableName() string {
+	return "customer_log"
 }
 
 //添加
-func (e *Customer) Insert() (id int, err error) {
+func (e *CustomerLog) Insert() (id int, err error) {
 
 	// check 用户名
 	var count int64
@@ -57,54 +39,5 @@ func (e *Customer) Insert() (id int, err error) {
 		return
 	}
 	id = e.Id
-	return
-}
-
-//修改
-func (e *Customer) Update(id int) (update SysUser, err error) {
-
-	if err = orm.Eloquent.Table(e.TableName()).First(&update, id).Error; err != nil {
-		return
-	}
-	if e.DeptId == 0 {
-		e.DeptId = update.RoleId
-	}
-
-	//参数1:是要修改的数据
-	//参数2:是修改的数据
-	if err = orm.Eloquent.Table(e.TableName()).Model(&update).Updates(&e).Error; err != nil {
-		return
-	}
-	return
-}
-
-//修改余额
-func (e *Customer) UpdateAmount(id int) (update Customer, err error) {
-	if err = orm.Eloquent.Table(e.TableName()).First(&update, id).Error; err != nil {
-		return
-	}
-	tx := orm.Eloquent.Set("gorm:query_option", "FOR UPDATE")
-	if err = tx.Table(e.TableName()).First(&update, id).Error; err != nil {
-		return
-	}
-	if err = tx.Exec("UPDATE customer SET amount = amount+? WHERE id = ?", e.Amount, id).Error; err != nil {
-		tx.Rollback()
-		return
-	}
-	tx.Commit()
-	return
-}
-
-//修改余额
-func (e *Customer) BatchUpdateAmount(updates []Customer) (update Customer, err error) {
-	tx := orm.Eloquent.Set("gorm:query_option", "FOR UPDATE")
-	if err = tx.Table(e.TableName()).First(&update, id).Error; err != nil {
-		return
-	}
-	if err = tx.Exec("UPDATE customer SET amount = amount+? WHERE id = ?", e.Amount, id).Error; err != nil {
-		tx.Rollback()
-		return
-	}
-	tx.Commit()
 	return
 }

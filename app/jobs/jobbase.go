@@ -7,10 +7,10 @@ import (
 
 	"github.com/robfig/cron/v3"
 
-	"go-admin/app/admin/models"
 	"go-admin/common/global"
 	"go-admin/pkg"
 	"go-admin/pkg/cronjob"
+	"go-admin/pkg/models"
 )
 
 var timeFormat = "2006-01-02 15:04:05"
