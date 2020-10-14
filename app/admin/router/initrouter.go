@@ -2,11 +2,11 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-admin/app/admin/middleware"
-	"go-admin/app/admin/middleware/handler"
 	"go-admin/common/global"
 	"go-admin/common/log"
 	_ "go-admin/pkg/jwtauth"
+	"go-admin/pkg/middleware"
+	"go-admin/pkg/middleware/handler"
 	"go-admin/tools"
 	"go-admin/tools/config"
 	"os"

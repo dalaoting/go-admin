@@ -3,8 +3,8 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"go-admin/app/admin/apis/syscategory"
-	"go-admin/app/admin/middleware"
 	jwt "go-admin/pkg/jwtauth"
+	"go-admin/pkg/middleware"
 )
 
 // 需认证的路由代码

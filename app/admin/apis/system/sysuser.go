@@ -5,8 +5,8 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/google/uuid"
 
-	"go-admin/app/admin/models"
 	"go-admin/common/global"
+	"go-admin/pkg/models"
 	"go-admin/tools"
 	"go-admin/tools/app"
 )

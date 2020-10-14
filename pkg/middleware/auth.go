@@ -3,8 +3,8 @@ package middleware
 import (
 	"time"
 
-	"go-admin/app/admin/middleware/handler"
 	jwt "go-admin/pkg/jwtauth"
+	"go-admin/pkg/middleware/handler"
 	"go-admin/tools/config"
 )
 

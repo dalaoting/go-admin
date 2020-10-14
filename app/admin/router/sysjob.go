@@ -3,11 +3,11 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"go-admin/app/admin/apis/sysjob"
-	"go-admin/app/admin/middleware"
-	"go-admin/app/admin/models"
 	"go-admin/app/admin/service/dto"
 	"go-admin/common/actions"
 	jwt "go-admin/pkg/jwtauth"
+	"go-admin/pkg/middleware"
+	"go-admin/pkg/models"
 )
 
 func init() {

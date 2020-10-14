@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"go-admin/app/admin/models"
+	"go-admin/pkg/models"
 	"go-admin/tools/app"
 )
 

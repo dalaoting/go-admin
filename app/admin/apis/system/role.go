@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	mycasbin "go-admin/pkg/casbin"
 
-	"go-admin/app/admin/models"
+	"go-admin/pkg/models"
 	"go-admin/tools"
 	"go-admin/tools/app"
 )

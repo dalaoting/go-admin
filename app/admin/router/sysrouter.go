@@ -9,10 +9,10 @@ import (
 	"go-admin/app/admin/apis/system"
 	"go-admin/app/admin/apis/system/dict"
 	. "go-admin/app/admin/apis/tools"
-	"go-admin/app/admin/middleware"
-	"go-admin/app/admin/middleware/handler"
 	_ "go-admin/docs"
 	jwt "go-admin/pkg/jwtauth"
+	"go-admin/pkg/middleware"
+	"go-admin/pkg/middleware/handler"
 	"go-admin/pkg/ws"
 
 	"github.com/gin-gonic/gin"
