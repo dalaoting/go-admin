@@ -99,7 +99,7 @@ func NOActionsGenV3(tab tools.SysTables) {
 	tools2.HasError(err, "", -1)
 
 	_ = tools2.PathCreate("./app/" + tab.PackageName + "/apis/" + tab.ModuleName)
-	_ = tools2.PathCreate("./app/" + tab.PackageName + "/models/")
+	_ = tools2.PathCreate("./pkg/models/")
 	_ = tools2.PathCreate("./app/" + tab.PackageName + "/router/")
 	_ = tools2.PathCreate("./app/" + tab.PackageName + "/service/dto/")
 	_ = tools2.PathCreate(config.GenConfig.FrontPath + "/api/")
@@ -119,7 +119,7 @@ func NOActionsGenV3(tab tools.SysTables) {
 	err = t6.Execute(&b6, tab)
 	var b7 bytes.Buffer
 	err = t7.Execute(&b7, tab)
-	tools2.FileCreate(b1, "./app/"+tab.PackageName+"/models/"+tab.BusinessName+".go")
+	tools2.FileCreate(b1, "./pkg/models/"+tab.BusinessName+".go")
 	tools2.FileCreate(b2, "./app/"+tab.PackageName+"/apis/"+tab.ModuleName+"/"+tab.BusinessName+".go")
 	tools2.FileCreate(b3, "./app/"+tab.PackageName+"/router/"+tab.BusinessName+".go")
 	tools2.FileCreate(b4, config.GenConfig.FrontPath+"/api/"+tab.BusinessName+".js")
@@ -148,7 +148,7 @@ func ActionsGenV3(tab tools.SysTables) {
 	t6, err := template.ParseFiles(basePath + "dto.go.template")
 	tools2.HasError(err, "", -1)
 
-	_ = tools2.PathCreate("./app/" + tab.PackageName + "/models/")
+	_ = tools2.PathCreate("./pkg/models/")
 	_ = tools2.PathCreate("./app/" + tab.PackageName + "/router/")
 	_ = tools2.PathCreate("./app/" + tab.PackageName + "/service/dto/")
 	_ = tools2.PathCreate(config.GenConfig.FrontPath + "/api/")
@@ -165,7 +165,7 @@ func ActionsGenV3(tab tools.SysTables) {
 	var b6 bytes.Buffer
 	err = t6.Execute(&b6, tab)
 
-	tools2.FileCreate(b1, "./app/"+tab.PackageName+"/models/"+tab.BusinessName+".go")
+	tools2.FileCreate(b1, "./pkg/models/"+tab.BusinessName+".go")
 	tools2.FileCreate(b3, "./app/"+tab.PackageName+"/router/"+tab.BusinessName+".go")
 	tools2.FileCreate(b4, config.GenConfig.FrontPath+"/api/"+tab.BusinessName+".js")
 	tools2.FileCreate(b5, config.GenConfig.FrontPath+"/views/"+tab.BusinessName+"/index.vue")
