@@ -15,3 +15,4 @@ temp/logs
 config/settings.dev.yml.log
 config/settings.b.dev.yml
 cmd/migrate/migration/version_local/*
+nohup.out
