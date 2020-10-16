@@ -15,6 +15,8 @@ type CustomerSearch struct {
 	dto.Pagination     `search:"-"`
     ID int64 `form:"ID" search:"type:exact;column:id;table:customer" comment:"客户ID"`
 
+    Name string `form:"name" search:"type:contains;column:name;table:customer" comment:"客户名称"`
+
     Status string `form:"status" search:"type:exact;column:status;table:customer" comment:"状态"`
 
     CreateBy string `form:"createBy" search:"type:exact;column:create_by;table:customer" comment:"创建人"`
