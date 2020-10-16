@@ -3,7 +3,7 @@ package router
 import (
     "github.com/gin-gonic/gin"
 
-    "go-admin/app/admin/middleware"
+    "go-admin/pkg/middleware"
     "go-admin/pkg/models"
     "go-admin/app/admin/service/dto"
     "go-admin/common/actions"
