@@ -43,19 +43,19 @@ type SysUserId struct {
 }
 
 type SysUserB struct {
-	NickName  string `gorm:"size:128" json:"nickName"` // 昵称
-	Phone     string `gorm:"size:11" json:"phone"`     // 手机号
-	RoleId    int    `gorm:"" json:"roleId"`           // 角色编码
-	Salt      string `gorm:"size:255" json:"salt"`     //盐
-	Avatar    string `gorm:"size:255" json:"avatar"`   //头像
-	Sex       string `gorm:"size:255" json:"sex"`      //性别
-	Email     string `gorm:"size:128" json:"email"`    //邮箱
-	DeptId    int    `gorm:"" json:"deptId"`           //部门编码
-	PostId    int    `gorm:"" json:"postId"`           //职位编码
-	CreateBy  string `gorm:"size:128" json:"createBy"` //
-	UpdateBy  string `gorm:"size:128" json:"updateBy"` //
-	Remark    string `gorm:"size:255" json:"remark"`   //备注
-	Status    string `gorm:"size:4;" json:"status"`
+	NickName string `gorm:"size:128" json:"nickName"` // 昵称
+	Phone    string `gorm:"size:11" json:"phone"`     // 手机号
+	RoleId   int    `gorm:"" json:"roleId"`           // 角色编码
+	Salt     string `gorm:"size:255" json:"salt"`     //盐
+	Avatar   string `gorm:"size:255" json:"avatar"`   //头像
+	Sex      string `gorm:"size:255" json:"sex"`      //性别
+	Email    string `gorm:"size:128" json:"email"`    //邮箱
+	DeptId   int    `gorm:"" json:"deptId"`           //部门编码
+	PostId   int    `gorm:"" json:"postId"`           //职位编码
+	CreateBy string `gorm:"size:128" json:"createBy"` //
+	UpdateBy string `gorm:"size:128" json:"updateBy"` //
+	Remark   string `gorm:"size:255" json:"remark"`   //备注
+	Status   string `gorm:"size:4;" json:"status"`
 	BaseModel
 
 	DataScope string `gorm:"-" json:"dataScope"`
@@ -319,4 +319,16 @@ func (e *SysUser) SetPwd(pwd SysUserPwd) (Result bool, err error) {
 
 func (e *SysUser) GetByUserId(tx *gorm.DB, id interface{}) error {
 	return tx.First(e, id).Error
+}
+
+func (e *SysUser) BatchGet(id []int) (result map[int]*SysUser, err error) {
+	result = map[int]*SysUser{}
+	record := make([]*SysUser, 0)
+	if err = orm.Eloquent.Table(e.TableName()).Where("user_id in (?)", id).Find(&record).Error; err != nil {
+		return
+	}
+	for _, user := range record {
+		result[user.UserId] = user
+	}
+	return
 }

@@ -2,6 +2,7 @@ package actions
 
 import (
 	"errors"
+	"go-admin/pkg/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -77,6 +78,24 @@ func Permission(tableName string, p *DataPermission) func(db *gorm.DB) *gorm.DB 
 		default:
 			return db
 		}
+	}
+}
+
+func PermissionDeptId(tableName string, p *DataPermission) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		if !config.ApplicationConfig.EnableDP {
+			return db
+		}
+
+		if p.DeptId == 0 {
+			return db.Where(tableName+".dept_id = ?", p.DeptId)
+		}
+		e := &models.SysDept{DeptId: p.DeptId}
+		dept, _ := e.Get()
+		if dept.ParentId > 0 {
+			return db.Where(tableName+".dept_id = ?", dept.ParentId)
+		}
+		return db.Where(tableName+".dept_id = ?", dept.DeptId)
 	}
 }
 

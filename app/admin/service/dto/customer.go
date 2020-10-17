@@ -3,7 +3,6 @@ package dto
 import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-	"time"
 
 	"go-admin/common/dto"
 	"go-admin/common/log"
@@ -14,17 +13,9 @@ import (
 
 type CustomerSearch struct {
 	dto.Pagination `search:"-"`
-	ID             int64 `form:"ID" search:"type:exact;column:id;table:customer" comment:"客户ID"`
-
-	Name string `form:"name" search:"type:contains;column:name;table:customer" comment:"客户名称"`
+	ID             string `form:"ID" search:"type:exact;column:id;table:customer" comment:"客户名"`
 
 	Status string `form:"status" search:"type:exact;column:status;table:customer" comment:"状态"`
-
-	CreateBy string `form:"createBy" search:"type:exact;column:create_by;table:customer" comment:"创建人"`
-
-	UpdateBy string `form:"updateBy" search:"type:exact;column:update_by;table:customer" comment:"更新人"`
-
-	CreatedAt time.Time `form:"createdAt" search:"type:gte;column:created_at;table:customer" comment:""`
 }
 
 func (m *CustomerSearch) GetNeedSearch() interface{} {
@@ -46,17 +37,17 @@ func (m *CustomerSearch) Generate() dto.Index {
 }
 
 type CustomerControl struct {
-	ID uint `uri:"ID" comment:"客户ID"` // 客户ID
+	ID uint `uri:"ID" comment:"客户名"` // 客户名
 
-	DeptId int64 `json:"deptId" comment:"企业ID"`
+	DeptId string `json:"deptId" comment:"企业"`
 
 	Name string `json:"name" comment:"客户名称"`
 
-	AvailAmount int64 `json:"availAmount" comment:"余额"`
+	AvailAmount int `json:"availAmount" comment:"余额"`
 
-	TotalAmount int64 `json:"totalAmount" comment:"总金额"`
+	TotalAmount int `json:"totalAmount" comment:"总金额"`
 
-	PrepayAmount int64 `json:"prepayAmount" comment:"冻结金额"`
+	PrepayAmount int `json:"prepayAmount" comment:"冻结金额"`
 
 	Status string `json:"status" comment:"状态"`
 }
