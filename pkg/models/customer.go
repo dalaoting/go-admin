@@ -16,10 +16,9 @@ type Customer struct {
 	TotalAmount  int64  `json:"totalAmount" gorm:"type:int;comment:总金额"`    //
 	PrepayAmount int64  `json:"prepayAmount" gorm:"type:int;comment:冻结金额"`  //
 	Status       string `json:"status" gorm:"type:varchar(4);comment:状态"`   //
-
-	CreateTime string `json:"createdAt" gorm:"-"`
-	CreateUser string `json:"createBy" gorm:"-"`
-	UpdateUser string `json:"updateBy" gorm:"-"`
+	CreateTime   string `json:"createdAt" gorm:"-"`
+	CreateUser   string `json:"createBy" gorm:"-"`
+	UpdateUser   string `json:"updateBy" gorm:"-"`
 }
 
 func (Customer) TableName() string {

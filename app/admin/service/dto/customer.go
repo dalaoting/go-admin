@@ -13,11 +13,7 @@ import (
 
 type CustomerSearch struct {
 	dto.Pagination `search:"-"`
-	ID             string `form:"ID" search:"type:exact;column:id;table:customer" comment:"客户名"`
-
-	DeptId string `form:"deptId" search:"type:exact;column:dept_id;table:customer" comment:"企业"`
-
-	Name string `form:"name" search:"type:exact;column:name;table:customer" comment:"客户名称"`
+	Name           string `form:"name" search:"type:contains;column:name;table:customer" comment:"客户名称"`
 
 	Status string `form:"status" search:"type:exact;column:status;table:customer" comment:"状态"`
 }
@@ -41,7 +37,7 @@ func (m *CustomerSearch) Generate() dto.Index {
 }
 
 type CustomerControl struct {
-	ID uint `uri:"ID" comment:"客户名"` // 客户名
+	ID uint `uri:"ID" comment:""` //
 
 	DeptId string `json:"deptId" comment:"企业"`
 
