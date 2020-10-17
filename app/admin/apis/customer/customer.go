@@ -140,14 +140,12 @@ func (e *Customer) InsertCustomer(c *gin.Context) {
 		e.Error(c, http.StatusUnprocessableEntity, err, "参数验证失败")
 		return
 	}
-
 	var object common.ActiveRecord
 	object, err = req.GenerateM()
 	if err != nil {
 		e.Error(c, http.StatusInternalServerError, err, "模型生成失败")
 		return
 	}
-
 	// 设置创建人
 	object.SetCreateBy(tools.GetUserIdUint(c))
 

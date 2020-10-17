@@ -12,9 +12,9 @@ type Customer struct {
 
 	DeptId       string `json:"deptId" gorm:"type:bigint;comment:企业"`       //
 	Name         string `json:"name" gorm:"type:varchar(128);comment:客户名称"` //
-	AvailAmount  int    `json:"availAmount" gorm:"type:int;comment:余额"`     //
-	TotalAmount  int    `json:"totalAmount" gorm:"type:int;comment:总金额"`    //
-	PrepayAmount int    `json:"prepayAmount" gorm:"type:int;comment:冻结金额"`  //
+	AvailAmount  int64  `json:"availAmount" gorm:"type:int;comment:余额"`     //
+	TotalAmount  int64  `json:"totalAmount" gorm:"type:int;comment:总金额"`    //
+	PrepayAmount int64  `json:"prepayAmount" gorm:"type:int;comment:冻结金额"`  //
 	Status       string `json:"status" gorm:"type:varchar(4);comment:状态"`   //
 
 	CreateTime string `json:"createdAt" gorm:"-"`

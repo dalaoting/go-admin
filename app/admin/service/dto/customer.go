@@ -15,6 +15,10 @@ type CustomerSearch struct {
 	dto.Pagination `search:"-"`
 	ID             string `form:"ID" search:"type:exact;column:id;table:customer" comment:"客户名"`
 
+	DeptId string `form:"deptId" search:"type:exact;column:dept_id;table:customer" comment:"企业"`
+
+	Name string `form:"name" search:"type:exact;column:name;table:customer" comment:"客户名称"`
+
 	Status string `form:"status" search:"type:exact;column:status;table:customer" comment:"状态"`
 }
 
@@ -43,11 +47,11 @@ type CustomerControl struct {
 
 	Name string `json:"name" comment:"客户名称"`
 
-	AvailAmount int `json:"availAmount" comment:"余额"`
+	AvailAmount int64 `json:"availAmount" comment:"余额"`
 
-	TotalAmount int `json:"totalAmount" comment:"总金额"`
+	TotalAmount int64 `json:"totalAmount" comment:"总金额"`
 
-	PrepayAmount int `json:"prepayAmount" comment:"冻结金额"`
+	PrepayAmount int64 `json:"prepayAmount" comment:"冻结金额"`
 
 	Status string `json:"status" comment:"状态"`
 }

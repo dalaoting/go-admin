@@ -2,12 +2,12 @@ package service
 
 import (
 	"errors"
+	"go-admin/pkg/models"
 	"go-admin/common/actions"
 	cDto "go-admin/common/dto"
 	"go-admin/common/log"
 	common "go-admin/common/models"
 	"go-admin/common/service"
-	"go-admin/pkg/models"
 	"gorm.io/gorm"
 )
 
@@ -25,7 +25,7 @@ func (e *Customer) GetCustomerPage(c cDto.Index, p *actions.DataPermission, list
 		Scopes(
 			cDto.MakeCondition(c.GetNeedSearch()),
 			cDto.Paginate(c.GetPageSize(), c.GetPageIndex()),
-			actions.PermissionDeptId(data.TableName(), p),
+			actions.Permission(data.TableName(), p),
 		).
 		Find(list).Limit(-1).Offset(-1).
 		Count(count).Error
