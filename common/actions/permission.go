@@ -81,6 +81,7 @@ func Permission(tableName string, p *DataPermission) func(db *gorm.DB) *gorm.DB 
 	}
 }
 
+// 根据最大的企业ID过滤
 func PermissionDeptId(tableName string, p *DataPermission) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		if !config.ApplicationConfig.EnableDP {

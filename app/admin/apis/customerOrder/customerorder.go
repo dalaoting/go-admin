@@ -4,13 +4,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"go-admin/app/admin/service"
 	common "go-admin/common/models"
+	"go-admin/pkg/constant"
 	"net/http"
 
-	"go-admin/pkg/models"
 	"go-admin/app/admin/service/dto"
 	"go-admin/common/actions"
 	"go-admin/common/apis"
 	"go-admin/common/log"
+	"go-admin/pkg/models"
 	"go-admin/tools"
 )
 
@@ -48,6 +49,28 @@ func (e *CustomerOrder) GetCustomerOrderList(c *gin.Context) {
 	if err != nil {
 		e.Error(c, http.StatusUnprocessableEntity, err, "查询失败")
 		return
+	}
+	var (
+		createUserId = make([]int, 0)
+	)
+	for i := range list {
+		createUserId = append(createUserId, int(list[i].CreateBy), int(list[i].UpdateBy))
+		list[i].CreateTime = list[i].CreatedAt.Format(constant.DefaultTimeFormat)
+	}
+	user := &models.SysUser{}
+	userMap, _ := user.BatchGet(createUserId)
+	for i := range list {
+		if v, ok := userMap[int(list[i].CreateBy)]; ok {
+			list[i].CreateUser = v.NickName
+		} else {
+			list[i].CreateUser = "用户"
+		}
+
+		if v, ok := userMap[int(list[i].UpdateBy)]; ok {
+			list[i].UpdateUser = v.NickName
+		} else {
+			list[i].UpdateUser = ""
+		}
 	}
 
 	e.PageOK(c, list, int(count), req.GetPageIndex(), req.GetPageSize(), "查询成功")

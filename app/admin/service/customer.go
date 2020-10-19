@@ -2,12 +2,12 @@ package service
 
 import (
 	"errors"
-	"go-admin/pkg/models"
 	"go-admin/common/actions"
 	cDto "go-admin/common/dto"
 	"go-admin/common/log"
 	common "go-admin/common/models"
 	"go-admin/common/service"
+	"go-admin/pkg/models"
 	"gorm.io/gorm"
 )
 
@@ -25,7 +25,7 @@ func (e *Customer) GetCustomerPage(c cDto.Index, p *actions.DataPermission, list
 		Scopes(
 			cDto.MakeCondition(c.GetNeedSearch()),
 			cDto.Paginate(c.GetPageSize(), c.GetPageIndex()),
-			actions.Permission(data.TableName(), p),
+			actions.PermissionDeptId(data.TableName(), p),
 		).
 		Find(list).Limit(-1).Offset(-1).
 		Count(count).Error
@@ -44,7 +44,7 @@ func (e *Customer) GetCustomer(d cDto.Control, p *actions.DataPermission, model 
 
 	db := e.Orm.Model(&data).
 		Scopes(
-			actions.Permission(data.TableName(), p),
+			actions.PermissionDeptId(data.TableName(), p),
 		).
 		First(model, d.GetId())
 	err = db.Error
@@ -83,7 +83,7 @@ func (e *Customer) UpdateCustomer(c common.ActiveRecord, p *actions.DataPermissi
 
 	db := e.Orm.Model(&data).
 		Scopes(
-			actions.Permission(data.TableName(), p),
+			actions.PermissionDeptId(data.TableName(), p),
 		).Where(c.GetId()).Updates(c)
 	if db.Error != nil {
 		log.Errorf("msgID[%s] db error:%s", msgID, err)
@@ -104,7 +104,7 @@ func (e *Customer) RemoveCustomer(d cDto.Control, c common.ActiveRecord, p *acti
 
 	db := e.Orm.Model(&data).
 		Scopes(
-			actions.Permission(data.TableName(), p),
+			actions.PermissionDeptId(data.TableName(), p),
 		).Where(d.GetId()).Delete(c)
 	if db.Error != nil {
 		err = db.Error
