@@ -54,6 +54,8 @@ type CustomerOrderControl struct {
 	Amount int64 `json:"amount,string" comment:"交易金额"`
 
 	Remark string `json:"remark" comment:"备注"`
+
+	IsAddBalance bool `json:"isAddBalance" comment:"是否需要增加相应的额度"`
 }
 
 func (s *CustomerOrderControl) Bind(ctx *gin.Context) error {

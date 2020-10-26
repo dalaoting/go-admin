@@ -116,18 +116,22 @@ func (e *CustomerOrder) InsertCustomerOrder(c *gin.Context) {
 		log.Error(err)
 		return
 	}
+	// 添加客户充值记录时，需要给客户添加额度
+	tx := db.Set("gorm:query_option", "FOR UPDATE")
 
 	msgID := tools.GenerateMsgIDFromContext(c)
 	//新增操作
 	req := control.Generate()
 	err = req.Bind(c)
 	if err != nil {
+		tx.Callback()
 		e.Error(c, http.StatusUnprocessableEntity, err, "参数验证失败")
 		return
 	}
 	var object common.ActiveRecord
 	object, err = req.GenerateM()
 	if err != nil {
+		tx.Callback()
 		e.Error(c, http.StatusInternalServerError, err, "模型生成失败")
 		return
 	}
@@ -135,15 +139,21 @@ func (e *CustomerOrder) InsertCustomerOrder(c *gin.Context) {
 	object.SetCreateBy(tools.GetUserIdUint(c))
 
 	serviceCustomerOrder := service.CustomerOrder{}
-	serviceCustomerOrder.Orm = db
+	serviceCustomerOrder.Orm = tx
 	serviceCustomerOrder.MsgID = msgID
 	err = serviceCustomerOrder.InsertCustomerOrder(object)
 	if err != nil {
+		tx.Callback()
 		log.Error(err)
 		e.Error(c, http.StatusInternalServerError, err, "创建失败")
 		return
 	}
+	// 是否需要增加客户余额
+	if control.IsAddBalance {
 
+	}
+
+	tx.Commit()
 	e.OK(c, object.GetId(), "创建成功")
 }
 
