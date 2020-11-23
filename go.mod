@@ -3,6 +3,7 @@ module go-admin
 go 1.14
 
 require (
+	github.com/SongLiangChen/common v1.1.1
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/casbin/casbin/v2 v2.11.2

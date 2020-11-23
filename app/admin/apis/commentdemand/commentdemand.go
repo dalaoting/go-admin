@@ -5,6 +5,7 @@ import (
 	"go-admin/app/admin/service"
 	common "go-admin/common/models"
 	"go-admin/pkg/constant"
+	"go-admin/pkg/uuid"
 	"net/http"
 	"strconv"
 
@@ -134,7 +135,9 @@ func (e *CommentDemand) InsertCommentDemand(c *gin.Context) {
 	if dept.ParentId > 0 {
 		control.DeptId = strconv.Itoa(dept.ParentId)
 	}
-	control.SerialNumber = "123213412"
+	uid, _ := uuid.UUID()
+	u := strconv.FormatUint(uid, 10)
+	control.SerialNumber = u
 
 	msgID := tools.GenerateMsgIDFromContext(c)
 	//新增操作

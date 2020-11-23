@@ -2,6 +2,7 @@ package main
 
 import (
 	"go-admin/cmd"
+	"go-admin/pkg/uuid"
 )
 
 // @title go-admin API
@@ -69,5 +70,6 @@ import (
 //}
 
 func main() {
+	uuid.InitUUID()
 	cmd.Execute()
 }
