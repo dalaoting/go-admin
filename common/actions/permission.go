@@ -88,8 +88,8 @@ func PermissionDeptId(tableName string, p *DataPermission) func(db *gorm.DB) *go
 			return db
 		}
 
-		if p.DeptId == 0 {
-			return db.Where(tableName+".dept_id = ?", p.DeptId)
+		if p.DataScope == "1" {
+			return db
 		}
 		e := &models.SysDept{DeptId: p.DeptId}
 		dept, _ := e.Get()

@@ -9,17 +9,17 @@ import (
 )
 
 type SysDept struct {
-	DeptId    int       `json:"deptId" gorm:"primary_key;auto_increment;"` //部门编码
-	ParentId  int       `json:"parentId" gorm:""`                          //上级部门
-	DeptPath  string    `json:"deptPath" gorm:"size:255;"`                 //
-	DeptName  string    `json:"deptName"  gorm:"size:128;"`                //部门名称
-	Sort      int       `json:"sort" gorm:""`                              //排序
-	Leader    string    `json:"leader" gorm:"size:128;"`                   //负责人
-	Phone     string    `json:"phone" gorm:"size:11;"`                     //手机
-	Email     string    `json:"email" gorm:"size:64;"`                     //邮箱
-	Status    string    `json:"status" gorm:"size:4;"`                     //状态
-	CreateBy  string    `json:"createBy" gorm:"size:64;"`
-	UpdateBy  string    `json:"updateBy" gorm:"size:64;"`
+	DeptId   int    `json:"deptId" gorm:"primary_key;auto_increment;"` //部门编码
+	ParentId int    `json:"parentId" gorm:""`                          //上级部门
+	DeptPath string `json:"deptPath" gorm:"size:255;"`                 //
+	DeptName string `json:"deptName"  gorm:"size:128;"`                //部门名称
+	Sort     int    `json:"sort" gorm:""`                              //排序
+	Leader   string `json:"leader" gorm:"size:128;"`                   //负责人
+	Phone    string `json:"phone" gorm:"size:11;"`                     //手机
+	Email    string `json:"email" gorm:"size:64;"`                     //邮箱
+	Status   string `json:"status" gorm:"size:4;"`                     //状态
+	CreateBy string `json:"createBy" gorm:"size:64;"`
+	UpdateBy string `json:"updateBy" gorm:"size:64;"`
 	BaseModel
 
 	DataScope string    `json:"dataScope" gorm:"-"`
@@ -273,4 +273,18 @@ func DiguiDeptLable(deptlist *[]SysDept, dept DeptLable) DeptLable {
 	}
 	dept.Children = min
 	return dept
+}
+
+func (e *SysDept) GetBatchParentDept(deptIds []int) map[int]*SysDept {
+	var (
+		result = make(map[int]*SysDept)
+		record = make([]*SysDept, 0)
+	)
+
+	table := orm.Eloquent.Table(e.TableName())
+	table.Where("dept_id IN (?) AND parent_id = 0", deptIds).Find(&record)
+	for _, dept := range record {
+		result[dept.DeptId] = dept
+	}
+	return result
 }

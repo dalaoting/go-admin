@@ -1,28 +1,26 @@
-package customer
+package userinfo
 
 import (
 	"github.com/gin-gonic/gin"
 	"go-admin/app/admin/service"
 	common "go-admin/common/models"
-	"go-admin/pkg/constant"
 	"net/http"
-	"strconv"
 
+	"go-admin/pkg/models"
 	"go-admin/app/admin/service/dto"
 	"go-admin/common/actions"
 	"go-admin/common/apis"
 	"go-admin/common/log"
-	"go-admin/pkg/models"
 	"go-admin/tools"
 )
 
-type Customer struct {
+type UserInfo struct {
 	apis.Api
 }
 
-func (e *Customer) GetCustomerList(c *gin.Context) {
+func (e *UserInfo) GetUserInfoList(c *gin.Context) {
 	msgID := tools.GenerateMsgIDFromContext(c)
-	d := new(dto.CustomerSearch)
+	d := new(dto.UserInfoSearch)
 	db, err := tools.GetOrm(c)
 	if err != nil {
 		log.Error(err)
@@ -40,60 +38,23 @@ func (e *Customer) GetCustomerList(c *gin.Context) {
 
 	//数据权限检查
 	p := actions.GetPermissionFromContext(c)
-	// 切换企业ID
-	de := &models.SysDept{DeptId: p.DeptId}
-	dept, _ := de.Get()
-	if dept.ParentId > 0 {
-		p.DeptId = dept.ParentId
-	}
-	list := make([]models.Customer, 0)
+
+	list := make([]models.UserInfo, 0)
 	var count int64
-	serviceStudent := service.Customer{}
+	serviceStudent := service.UserInfo{}
 	serviceStudent.MsgID = msgID
 	serviceStudent.Orm = db
-	err = serviceStudent.GetCustomerPage(req, p, &list, &count)
+	err = serviceStudent.GetUserInfoPage(req, p, &list, &count)
 	if err != nil {
 		e.Error(c, http.StatusUnprocessableEntity, err, "查询失败")
 		return
 	}
-	var (
-		createUserId = make([]int, 0)
-		deptIds      = make([]int, 0)
-	)
 
-	for i := range list {
-		createUserId = append(createUserId, int(list[i].CreateBy), int(list[i].UpdateBy))
-		deptId, _ := strconv.Atoi(list[i].DeptId)
-		deptIds = append(deptIds, deptId)
-		list[i].CreateTime = list[i].CreatedAt.Format(constant.DefaultTimeFormat)
-	}
-
-	parentDeptMap := dept.GetBatchParentDept(deptIds)
-
-	user := &models.SysUser{}
-	userMap, _ := user.BatchGet(createUserId)
-	for i := range list {
-		if v, ok := userMap[int(list[i].CreateBy)]; ok {
-			list[i].CreateUser = v.NickName
-		} else {
-			list[i].CreateUser = "用户"
-		}
-
-		if v, ok := userMap[int(list[i].UpdateBy)]; ok {
-			list[i].UpdateUser = v.NickName
-		} else {
-			list[i].UpdateUser = ""
-		}
-		deptId, _ := strconv.Atoi(list[i].DeptId)
-		if v, ok := parentDeptMap[deptId]; ok {
-			list[i].DeptId = v.DeptName
-		}
-	}
 	e.PageOK(c, list, int(count), req.GetPageIndex(), req.GetPageSize(), "查询成功")
 }
 
-func (e *Customer) GetCustomer(c *gin.Context) {
-	control := new(dto.CustomerById)
+func (e *UserInfo) GetUserInfo(c *gin.Context) {
+	control := new(dto.UserInfoById)
 	db, err := tools.GetOrm(c)
 	if err != nil {
 		log.Error(err)
@@ -108,15 +69,15 @@ func (e *Customer) GetCustomer(c *gin.Context) {
 		e.Error(c, http.StatusUnprocessableEntity, err, "参数验证失败")
 		return
 	}
-	var object models.Customer
+	var object models.UserInfo
 
 	//数据权限检查
 	p := actions.GetPermissionFromContext(c)
 
-	serviceCustomer := service.Customer{}
-	serviceCustomer.MsgID = msgID
-	serviceCustomer.Orm = db
-	err = serviceCustomer.GetCustomer(req, p, &object)
+	serviceUserInfo := service.UserInfo{}
+	serviceUserInfo.MsgID = msgID
+	serviceUserInfo.Orm = db
+	err = serviceUserInfo.GetUserInfo(req, p, &object)
 	if err != nil {
 		e.Error(c, http.StatusUnprocessableEntity, err, "查询失败")
 		return
@@ -125,21 +86,12 @@ func (e *Customer) GetCustomer(c *gin.Context) {
 	e.OK(c, object, "查看成功")
 }
 
-func (e *Customer) InsertCustomer(c *gin.Context) {
-	control := new(dto.CustomerControl)
+func (e *UserInfo) InsertUserInfo(c *gin.Context) {
+	control := new(dto.UserInfoControl)
 	db, err := tools.GetOrm(c)
 	if err != nil {
 		log.Error(err)
 		return
-	}
-	//数据权限检查
-	p := actions.GetPermissionFromContext(c)
-	control.DeptId = strconv.Itoa(p.DeptId)
-	// 切换企业ID
-	de := &models.SysDept{DeptId: p.DeptId}
-	dept, _ := de.Get()
-	if dept.ParentId > 0 {
-		control.DeptId = strconv.Itoa(dept.ParentId)
 	}
 
 	msgID := tools.GenerateMsgIDFromContext(c)
@@ -159,10 +111,10 @@ func (e *Customer) InsertCustomer(c *gin.Context) {
 	// 设置创建人
 	object.SetCreateBy(tools.GetUserIdUint(c))
 
-	serviceCustomer := service.Customer{}
-	serviceCustomer.Orm = db
-	serviceCustomer.MsgID = msgID
-	err = serviceCustomer.InsertCustomer(object)
+	serviceUserInfo := service.UserInfo{}
+	serviceUserInfo.Orm = db
+	serviceUserInfo.MsgID = msgID
+	err = serviceUserInfo.InsertUserInfo(object)
 	if err != nil {
 		log.Error(err)
 		e.Error(c, http.StatusInternalServerError, err, "创建失败")
@@ -172,8 +124,8 @@ func (e *Customer) InsertCustomer(c *gin.Context) {
 	e.OK(c, object.GetId(), "创建成功")
 }
 
-func (e *Customer) UpdateCustomer(c *gin.Context) {
-	control := new(dto.CustomerControl)
+func (e *UserInfo) UpdateUserInfo(c *gin.Context) {
+	control := new(dto.UserInfoControl)
 	db, err := tools.GetOrm(c)
 	if err != nil {
 		log.Error(err)
@@ -199,10 +151,10 @@ func (e *Customer) UpdateCustomer(c *gin.Context) {
 	//数据权限检查
 	p := actions.GetPermissionFromContext(c)
 
-	serviceCustomer := service.Customer{}
-	serviceCustomer.Orm = db
-	serviceCustomer.MsgID = msgID
-	err = serviceCustomer.UpdateCustomer(object, p)
+	serviceUserInfo := service.UserInfo{}
+	serviceUserInfo.Orm = db
+	serviceUserInfo.MsgID = msgID
+	err = serviceUserInfo.UpdateUserInfo(object, p)
 	if err != nil {
 		log.Error(err)
 		return
@@ -210,8 +162,8 @@ func (e *Customer) UpdateCustomer(c *gin.Context) {
 	e.OK(c, object.GetId(), "更新成功")
 }
 
-func (e *Customer) DeleteCustomer(c *gin.Context) {
-	control := new(dto.CustomerById)
+func (e *UserInfo) DeleteUserInfo(c *gin.Context) {
+	control := new(dto.UserInfoById)
 	db, err := tools.GetOrm(c)
 	if err != nil {
 		log.Error(err)
@@ -240,10 +192,10 @@ func (e *Customer) DeleteCustomer(c *gin.Context) {
 	// 数据权限检查
 	p := actions.GetPermissionFromContext(c)
 
-	serviceCustomer := service.Customer{}
-	serviceCustomer.Orm = db
-	serviceCustomer.MsgID = msgID
-	err = serviceCustomer.RemoveCustomer(req, object, p)
+	serviceUserInfo := service.UserInfo{}
+	serviceUserInfo.Orm = db
+	serviceUserInfo.MsgID = msgID
+	err = serviceUserInfo.RemoveUserInfo(req, object, p)
 	if err != nil {
 		log.Error(err)
 		return

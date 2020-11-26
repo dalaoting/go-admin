@@ -2,30 +2,30 @@ package service
 
 import (
 	"errors"
+	"go-admin/pkg/models"
 	"go-admin/common/actions"
 	cDto "go-admin/common/dto"
 	"go-admin/common/log"
 	common "go-admin/common/models"
 	"go-admin/common/service"
-	"go-admin/pkg/models"
 	"gorm.io/gorm"
 )
 
-type CommentDemandAssign struct {
+type UserInfo struct {
 	service.Service
 }
 
-// GetCommentDemandAssignPage 获取CommentDemandAssign列表
-func (e *CommentDemandAssign) GetCommentDemandAssignPage(c cDto.Index, p *actions.DataPermission, list *[]models.CommentDemandAssign, count *int64) error {
+// GetUserInfoPage 获取UserInfo列表
+func (e *UserInfo) GetUserInfoPage(c cDto.Index, p *actions.DataPermission, list *[]models.UserInfo, count *int64) error {
 	var err error
-	var data models.CommentDemandAssign
+	var data models.UserInfo
 	msgID := e.MsgID
 
 	err = e.Orm.Model(&data).
 		Scopes(
 			cDto.MakeCondition(c.GetNeedSearch()),
 			cDto.Paginate(c.GetPageSize(), c.GetPageIndex()),
-			actions.PermissionDeptId(data.TableName(), p),
+			actions.Permission(data.TableName(), p),
 		).
 		Find(list).Limit(-1).Offset(-1).
 		Count(count).Error
@@ -36,10 +36,10 @@ func (e *CommentDemandAssign) GetCommentDemandAssignPage(c cDto.Index, p *action
 	return nil
 }
 
-// GetCommentDemandAssign 获取CommentDemandAssign对象
-func (e *CommentDemandAssign) GetCommentDemandAssign(d cDto.Control, p *actions.DataPermission, model *models.CommentDemandAssign) error {
+// GetUserInfo 获取UserInfo对象
+func (e *UserInfo) GetUserInfo(d cDto.Control, p *actions.DataPermission, model *models.UserInfo) error {
 	var err error
-	var data models.CommentDemandAssign
+	var data models.UserInfo
 	msgID := e.MsgID
 
 	db := e.Orm.Model(&data).
@@ -60,10 +60,10 @@ func (e *CommentDemandAssign) GetCommentDemandAssign(d cDto.Control, p *actions.
 	return nil
 }
 
-// InsertCommentDemandAssign 创建CommentDemandAssign对象
-func (e *CommentDemandAssign) InsertCommentDemandAssign(model common.ActiveRecord) error {
+// InsertUserInfo 创建UserInfo对象
+func (e *UserInfo) InsertUserInfo(model common.ActiveRecord) error {
 	var err error
-	var data models.CommentDemandAssign
+	var data models.UserInfo
 	msgID := e.MsgID
 
 	err = e.Orm.Model(&data).
@@ -75,10 +75,10 @@ func (e *CommentDemandAssign) InsertCommentDemandAssign(model common.ActiveRecor
 	return nil
 }
 
-// UpdateCommentDemandAssign 修改CommentDemandAssign对象
-func (e *CommentDemandAssign) UpdateCommentDemandAssign(c common.ActiveRecord, p *actions.DataPermission) error {
+// UpdateUserInfo 修改UserInfo对象
+func (e *UserInfo) UpdateUserInfo(c common.ActiveRecord, p *actions.DataPermission) error {
 	var err error
-	var data models.CommentDemandAssign
+	var data models.UserInfo
 	msgID := e.MsgID
 
 	db := e.Orm.Model(&data).
@@ -96,10 +96,10 @@ func (e *CommentDemandAssign) UpdateCommentDemandAssign(c common.ActiveRecord, p
 	return nil
 }
 
-// RemoveCommentDemandAssign 删除CommentDemandAssign
-func (e *CommentDemandAssign) RemoveCommentDemandAssign(d cDto.Control, c common.ActiveRecord, p *actions.DataPermission) error {
+// RemoveUserInfo 删除UserInfo
+func (e *UserInfo) RemoveUserInfo(d cDto.Control, c common.ActiveRecord, p *actions.DataPermission) error {
 	var err error
-	var data models.CommentDemandAssign
+	var data models.UserInfo
 	msgID := e.MsgID
 
 	db := e.Orm.Model(&data).
