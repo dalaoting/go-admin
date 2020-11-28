@@ -55,7 +55,7 @@ type UserInfoControl struct {
 
 	Status string `json:"status" comment:"状态"`
 
-	ForbidDeadline time.Time `json:"forbidDeadline" comment:"禁用时间"`
+	ForbidDeadline time.Time `json:"forbidDeadline" comment:"禁用截止时间"`
 
 	CreateTime time.Time `json:"createTime" comment:"创建时间"`
 
