@@ -2,12 +2,12 @@ package service
 
 import (
 	"errors"
-	"go-admin/pkg/models"
 	"go-admin/common/actions"
 	cDto "go-admin/common/dto"
 	"go-admin/common/log"
 	common "go-admin/common/models"
 	"go-admin/common/service"
+	"go-admin/pkg/models"
 	"gorm.io/gorm"
 )
 
@@ -65,7 +65,6 @@ func (e *CustomerOrder) InsertCustomerOrder(model common.ActiveRecord) error {
 	var err error
 	var data models.CustomerOrder
 	msgID := e.MsgID
-
 	err = e.Orm.Model(&data).
 		Create(model).Error
 	if err != nil {

@@ -18,6 +18,11 @@ const (
 	OpTypeSub = 2
 )
 
+const (
+	BsTypeRecharge = 1000 // 充值
+	BSTypeAdmin    = 2006 // 管理后台操作
+)
+
 var (
 	ErrAccountNotFound = errors.New("资金账户不存在")
 	ErrAmountNotEnough = errors.New("可用余额不足")

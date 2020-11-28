@@ -1,10 +1,12 @@
 package customerOrder
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"go-admin/app/admin/service"
 	common "go-admin/common/models"
 	"go-admin/pkg/constant"
+	"go-admin/pkg/service/customerService"
 	"net/http"
 
 	"go-admin/app/admin/service/dto"
@@ -150,7 +152,19 @@ func (e *CustomerOrder) InsertCustomerOrder(c *gin.Context) {
 	}
 	// 是否需要增加客户余额
 	if control.IsAddBalance {
-
+		if err = customerService.OperateCustomerWithTx(tx, &models.CustomerOperation{
+			CustomerId: int(control.CustomerId),
+			Amount:     control.Amount,
+			OpType:     models.OpTypeAdd,
+			BsType:     models.BsTypeRecharge,
+			Detail:     "客户充值金额",
+			Ext:        fmt.Sprintf("%v", object.GetId()),
+		}); err != nil {
+			tx.Callback()
+			log.Error(err)
+			e.Error(c, http.StatusInternalServerError, err, "创建失败")
+			return
+		}
 	}
 
 	tx.Commit()
