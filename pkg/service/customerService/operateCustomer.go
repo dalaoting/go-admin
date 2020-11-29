@@ -63,9 +63,9 @@ func findCustomersByOperation(db *gorm.DB, tasks []*models.CustomerOperation) (m
 		db = global.Eloquent
 	}
 
-	where := fmt.Sprintf("(customer_id='%v')", tasks[0].CustomerId)
+	where := fmt.Sprintf("(id=%v)", tasks[0].CustomerId)
 	for i := 1; i < len(tasks); i++ {
-		where += fmt.Sprintf("or (user_id='%v')", tasks[i].CustomerId)
+		where += fmt.Sprintf("or (id=%v)", tasks[i].CustomerId)
 	}
 
 	customers := make([]*models.Customer, 0)
@@ -152,7 +152,7 @@ func updateCustomersBatch(db *gorm.DB, customers map[string]*models.Customer) er
 	}
 
 	ids := make([]string, 0)
-	sql := "update account set avail_amount = case id "
+	sql := "update customer set avail_amount = case id "
 	for _, customer := range customers {
 		ids = append(ids, strconv.Itoa(int(customer.ID)))
 		sql += fmt.Sprintf("when %v then '%v' ", customer.ID, customer.AvailAmount)
