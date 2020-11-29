@@ -119,21 +119,21 @@ func (e *CustomerOrder) InsertCustomerOrder(c *gin.Context) {
 		return
 	}
 	// 添加客户充值记录时，需要给客户添加额度
-	tx := db.Set("gorm:query_option", "FOR UPDATE")
+	tx := db.Begin().Set("gorm:query_option", "FOR UPDATE")
 
 	msgID := tools.GenerateMsgIDFromContext(c)
 	//新增操作
 	req := control.Generate()
 	err = req.Bind(c)
 	if err != nil {
-		tx.Callback()
+		tx.Rollback()
 		e.Error(c, http.StatusUnprocessableEntity, err, "参数验证失败")
 		return
 	}
 	var object common.ActiveRecord
 	object, err = req.GenerateM()
 	if err != nil {
-		tx.Callback()
+		tx.Rollback()
 		e.Error(c, http.StatusInternalServerError, err, "模型生成失败")
 		return
 	}
@@ -145,23 +145,25 @@ func (e *CustomerOrder) InsertCustomerOrder(c *gin.Context) {
 	serviceCustomerOrder.MsgID = msgID
 	err = serviceCustomerOrder.InsertCustomerOrder(object)
 	if err != nil {
-		tx.Callback()
+		tx.Rollback()
 		log.Error(err)
-		e.Error(c, http.StatusInternalServerError, err, "创建失败")
+		e.Error(c, http.StatusInternalServerError, err, "创建失败, 流水已存在")
 		return
 	}
 	// 是否需要增加客户余额
-	if control.IsAddBalance {
+	orderControl := req.(*dto.CustomerOrderControl)
+	if orderControl.IsAddBalance {
+		tx = tx.Model(nil).Table("")
 		if err = customerService.OperateCustomerWithTx(tx, &models.CustomerOperation{
-			CustomerId: int(control.CustomerId),
-			Amount:     control.Amount,
+			CustomerId: int(orderControl.CustomerId),
+			Amount:     orderControl.Amount,
 			OpType:     models.OpTypeAdd,
 			BsType:     models.BsTypeRecharge,
 			Detail:     "客户充值金额",
 			Ext:        fmt.Sprintf("%v", object.GetId()),
 			CreateBy:  tools.GetUserIdUint(c),
 		}); err != nil {
-			tx.Callback()
+			tx.Rollback()
 			log.Error(err)
 			e.Error(c, http.StatusInternalServerError, err, "创建失败")
 			return
