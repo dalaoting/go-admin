@@ -35,6 +35,7 @@ type CustomerOperation struct {
 	BsType     int
 	Detail     string
 	Ext        string
+	CreateBy  uint
 }
 
 func (e *CustomerOperation) Key() string {

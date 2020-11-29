@@ -159,6 +159,7 @@ func (e *CustomerOrder) InsertCustomerOrder(c *gin.Context) {
 			BsType:     models.BsTypeRecharge,
 			Detail:     "客户充值金额",
 			Ext:        fmt.Sprintf("%v", object.GetId()),
+			CreateBy:  tools.GetUserIdUint(c),
 		}); err != nil {
 			tx.Callback()
 			log.Error(err)

@@ -104,6 +104,7 @@ func newCustomerLog(customer *models.Customer, operate *models.CustomerOperation
 		Ext:          operate.Ext,
 		BeforeAmount: customer.AvailAmount,
 	}
+	log.CreateBy = operate.CreateBy
 
 	if operate.OpType == models.OpTypeAdd {
 		customer.AvailAmount = customer.AvailAmount + operate.Amount
@@ -129,12 +130,12 @@ func insertCustomerLogBatch(db *gorm.DB, logs []*models.CustomerLog) error {
 	}
 
 	sql := "insert into customer_log (customer_id, amount, op_type, " +
-		"bs_type, detail, before_amount, after_amount, ext) values "
+		"bs_type, detail, before_amount, after_amount, ext, create_by, created_at) values "
 	values := []string{}
 	for _, log := range logs {
-		values = append(values, fmt.Sprintf("('%v', %v, %v, %v, '%v', %v, %v, '%v')",
+		values = append(values, fmt.Sprintf("('%v', %v, %v, %v, '%v', %v, %v, '%v', %v, now())",
 			log.CustomerId, log.Amount, log.OpType, log.BsType, log.Detail,
-			log.BeforeAmount, log.AfterAmount, log.Ext))
+			log.BeforeAmount, log.AfterAmount, log.Ext, log.CreateBy))
 	}
 
 	sql += strings.Join(values, ", ")
