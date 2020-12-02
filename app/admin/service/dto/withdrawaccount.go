@@ -84,15 +84,8 @@ func (s *WithdrawAccountControl) Generate() dto.Control {
 func (s *WithdrawAccountControl) GenerateM() (common.ActiveRecord, error) {
 	return &models.WithdrawAccount{
 
-		ID:          s.ID,
-		Identity:    s.Identity,
-		Type:        s.Type,
-		Account:     s.Account,
-		AccountName: s.AccountName,
-		Status:      s.Status,
-		IsDelete:    s.IsDelete,
-		CreateTime:  s.CreateTime,
-		UpdateTime:  s.UpdateTime,
+		ID:     s.ID,
+		Status: s.Status,
 	}, nil
 }
 
