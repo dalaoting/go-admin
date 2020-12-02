@@ -84,19 +84,8 @@ func (s *UserInfoControl) Generate() dto.Control {
 func (s *UserInfoControl) GenerateM() (common.ActiveRecord, error) {
 	return &models.UserInfo{
 
-		Model:          gorm.Model{ID: s.ID},
-		Identity:       s.Identity,
-		Account:        s.Account,
-		Password:       s.Password,
-		NickName:       s.NickName,
-		Avatar:         s.Avatar,
-		Profession:     s.Profession,
-		Sex:            s.Sex,
-		Remark:         s.Remark,
-		Status:         s.Status,
-		ForbidDeadline: s.ForbidDeadline,
-		CreateTime:     s.CreateTime,
-		UpdateTime:     s.UpdateTime,
+		Model:  gorm.Model{ID: s.ID},
+		Status: s.Status,
 	}, nil
 }
 
