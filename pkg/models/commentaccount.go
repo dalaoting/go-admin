@@ -1,15 +1,14 @@
 package models
 
 import (
-	"time"
-
 	"go-admin/common/models"
+	"time"
 )
 
 type CommentAccount struct {
-	ID        uint `gorm:"primarykey"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID        uint      `gorm:"primarykey"`
+	CreatedAt time.Time `json:"createTime"`
+	UpdatedAt time.Time `json:"updateTime"`
 	models.ControlBy
 
 	Identity    string    `json:"identity" gorm:"type:varchar(32);comment:用户id"`   //
@@ -18,8 +17,8 @@ type CommentAccount struct {
 	AccountName string    `json:"accountName" gorm:"type:varchar(64);comment:用户名"` //
 	Status      string    `json:"status" gorm:"type:int;comment:状态"`               //
 	IsDelete    string    `json:"isDelete" gorm:"type:int;comment:已删除"`            //
-	CreateTime  time.Time `json:"createTime" gorm:"type:timestamp;comment:创建时间"`   //
-	UpdateTime  time.Time `json:"updateTime" gorm:"type:timestamp;comment:更新时间"`   //
+	CreateTime  time.Time `gorm:"-"`                                               //
+	UpdateTime  time.Time `gorm:"-"`                                               //
 }
 
 func (CommentAccount) TableName() string {
