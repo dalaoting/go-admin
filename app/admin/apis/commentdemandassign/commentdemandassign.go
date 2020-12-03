@@ -1,10 +1,14 @@
 package commentdemandassign
 
 import (
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"go-admin/app/admin/service"
 	common "go-admin/common/models"
+	"go-admin/pkg/service/mediaService"
+	"gorm.io/gorm"
 	"net/http"
+	"strings"
 
 	"go-admin/pkg/models"
 	"go-admin/app/admin/service/dto"
@@ -48,6 +52,19 @@ func (e *CommentDemandAssign) GetCommentDemandAssignList(c *gin.Context) {
 	if err != nil {
 		e.Error(c, http.StatusUnprocessableEntity, err, "查询失败")
 		return
+	}
+	for i := range list {
+		if list[i].OrderMedias != "" {
+			list[i].OrderMedias, err = getMediaUrlByString(db, list[i].OrderMedias)
+		}
+
+		if list[i].CommentMedias != "" {
+			list[i].CommentMedias, err = getMediaUrlByString(db, list[i].CommentMedias)
+		}
+
+		if list[i].SettleMedias != "" {
+			list[i].SettleMedias, err = getMediaUrlByString(db, list[i].SettleMedias)
+		}
 	}
 
 	e.PageOK(c, list, int(count), req.GetPageIndex(), req.GetPageSize(), "查询成功")
@@ -201,4 +218,16 @@ func (e *CommentDemandAssign) DeleteCommentDemandAssign(c *gin.Context) {
 		return
 	}
 	e.OK(c, object.GetId(), "删除成功")
+}
+
+func getMediaUrlByString(db *gorm.DB, mediaIdsStr string) (string, error) {
+	mediaIds := make([]int64, 0)
+	if err := json.Unmarshal([]byte(mediaIdsStr), &mediaIds); err != nil {
+		return "", err
+	}
+	urlArr, err := mediaService.GetMediaUrlArr(db, mediaIds)
+	if err != nil {
+		return "", err
+	}
+	return strings.Join(urlArr, ","), nil
 }
