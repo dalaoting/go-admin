@@ -2,8 +2,6 @@ package dto
 
 import (
 	"github.com/gin-gonic/gin"
-	"time"
-
 	"go-admin/common/dto"
 	"go-admin/common/log"
 	common "go-admin/common/models"
@@ -39,23 +37,8 @@ func (m *CommentAccountSearch) Generate() dto.Index {
 }
 
 type CommentAccountControl struct {
-	ID uint `uri:"ID" comment:"id"` // id
-
-	Identity string `json:"identity" comment:"用户id"`
-
-	Type string `json:"type" comment:"类型"`
-
-	Account string `json:"account" comment:"账号"`
-
-	AccountName string `json:"accountName" comment:"用户名"`
-
+	ID     uint   `uri:"ID" comment:"id"` // id
 	Status string `json:"status" comment:"状态"`
-
-	IsDelete string `json:"isDelete" comment:"已删除"`
-
-	CreateTime time.Time `json:"createTime" comment:"创建时间"`
-
-	UpdateTime time.Time `json:"updateTime" comment:"更新时间"`
 }
 
 func (s *CommentAccountControl) Bind(ctx *gin.Context) error {
@@ -80,15 +63,8 @@ func (s *CommentAccountControl) Generate() dto.Control {
 func (s *CommentAccountControl) GenerateM() (common.ActiveRecord, error) {
 	return &models.CommentAccount{
 
-		ID:          s.ID,
-		Identity:    s.Identity,
-		Type:        s.Type,
-		Account:     s.Account,
-		AccountName: s.AccountName,
-		Status:      s.Status,
-		IsDelete:    s.IsDelete,
-		CreateTime:  s.CreateTime,
-		UpdateTime:  s.UpdateTime,
+		ID:     s.ID,
+		Status: s.Status,
 	}, nil
 }
 
