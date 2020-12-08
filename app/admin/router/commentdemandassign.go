@@ -23,4 +23,9 @@ func registerCommentDemandAssignRouter(v1 *gin.RouterGroup, authMiddleware *jwt.
 		r.PUT("/:id", api.UpdateCommentDemandAssign)
 		r.DELETE("", api.DeleteCommentDemandAssign)
 	}
+
+	{
+		r.GET("/issue/:id", api.GetCommentDemandAssign)
+		r.PUT("/issue/:id", api.UpdateCommentDemandAssign)
+	}
 }
