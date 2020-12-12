@@ -83,7 +83,7 @@ func (e *CommentDemandAssign) Reject(c *gin.Context) {
 	}
 
 	// TODO 添加一句反馈消息
-	issue := models.AssignIssue{
+	issue := &models.AssignIssue{
 		Identity:     data.Commentator,
 		AssignSerial: req.AssignSerial,
 		DeptId:       p.DeptId,

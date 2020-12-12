@@ -64,7 +64,7 @@ func (e *CommentDemandAssign) PushIssue(c *gin.Context) {
 		return
 	}
 
-	issue := models.AssignIssue{
+	issue := &models.AssignIssue{
 		Identity:     record.Commentator,
 		AssignSerial: req.AssignSerial,
 		DeptId:       p.DeptId,
