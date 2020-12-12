@@ -43,7 +43,7 @@ type UploadFileResponse struct {
 
 func (e *Media) UploadFile(c *gin.Context) {
 	req := &UploadFileRequest{}
-	if err := c.ShouldBindJSON(req); err != nil {
+	if err := c.ShouldBind(req); err != nil {
 		e.Error(c, http.StatusUnprocessableEntity, err, "参数错误")
 		return
 	}
