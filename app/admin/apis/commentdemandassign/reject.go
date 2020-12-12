@@ -15,7 +15,7 @@ import (
 )
 
 type RejectRequest struct {
-	AssignSerial string `json:"assignSerial" binding:"required"`
+	AssignSerial string `json:"assign_serial" binding:"required"`
 	Remark       string `json:"remark" binding:"required"`
 }
 
