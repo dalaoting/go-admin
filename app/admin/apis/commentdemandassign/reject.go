@@ -55,8 +55,7 @@ func (e *CommentDemandAssign) Reject(c *gin.Context) {
 		e.Error(c, http.StatusUnprocessableEntity, err, "查看对象不存在或无权查看")
 		return
 	}
-	if db.Error != nil {
-		log.Error(err)
+	if err != nil {
 		tx.Rollback()
 		log.Errorf("msgID[%s] db error:%s", msgID, err)
 		e.Error(c, http.StatusUnprocessableEntity, err, "查询失败")
