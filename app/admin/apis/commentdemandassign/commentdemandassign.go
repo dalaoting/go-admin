@@ -308,13 +308,10 @@ func (e *CommentDemandAssign) UpdateStatus(c *gin.Context) {
 	settleStatus := strconv.Itoa(constant.DemandAssignRewardSettle)
 	// 开始更新
 	mediaIdsBuf, _ := json.Marshal(req.MediaIds)
-	updates := map[string]interface{}{
-		"status":        settleStatus,
-		"settle_medias": string(mediaIdsBuf),
-	}
 
-	if err := tx.Model(&models.CommentDemandAssign{}).
-		Where("assign_serial=?", record.Serial).Updates(updates).Error; err != nil {
+	record.Status = settleStatus
+	record.SettleMedias = string(mediaIdsBuf)
+	if err := tx.Save(record).Error; err != nil {
 		tx.Rollback()
 		e.Error(c, http.StatusUnprocessableEntity, err, "更新失败")
 		return
