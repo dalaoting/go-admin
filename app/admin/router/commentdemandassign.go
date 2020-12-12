@@ -22,10 +22,12 @@ func registerCommentDemandAssignRouter(v1 *gin.RouterGroup, authMiddleware *jwt.
 		r.POST("", api.InsertCommentDemandAssign)
 		r.PUT("/:id", api.UpdateCommentDemandAssign)
 		r.DELETE("", api.DeleteCommentDemandAssign)
+		r.POST("/reject", api.Reject)
 	}
 
 	{
-		r.GET("/issue/:id", api.GetCommentDemandAssign)
-		r.PUT("/issue/:id", api.UpdateCommentDemandAssign)
+		r.GET("/issue/:id", api.GetAssignIssueList)
+		r.PUT("/issue/:id", api.PushIssue)
+
 	}
 }
