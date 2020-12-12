@@ -8,7 +8,6 @@ import (
 
 type CommentDemandAssign struct {
 	gorm.Model
-	models.ControlBy
 
 	Serial             string `json:"serial" gorm:"column:assign_serial;ype:varchar(64);comment:任务编号"` //
 	DemandSerial       string `json:"demandSerial" gorm:"type:varchar(64);comment:需求编号"`               //
@@ -29,6 +28,14 @@ type CommentDemandAssign struct {
 
 func (CommentDemandAssign) TableName() string {
 	return "comment_demand_assign"
+}
+
+func (e *CommentDemandAssign) SetCreateBy(createBy uint) {
+
+}
+
+func (e *CommentDemandAssign) SetUpdateBy(updateBy uint) {
+
 }
 
 func (e *CommentDemandAssign) Generate() models.ActiveRecord {
