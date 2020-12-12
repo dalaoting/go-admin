@@ -75,7 +75,7 @@ func (e *CommentDemandAssign) Reject(c *gin.Context) {
 		data.Status = strconv.Itoa(constant.DemandAssignOrder)
 	}
 	data.TipsStatus = "1"
-	if err := tx.Save(data).Error; err != nil {
+	if err := tx.Save(&data).Error; err != nil {
 		log.Error(err)
 		tx.Rollback()
 		e.Error(c, http.StatusUnprocessableEntity, err, "驳回失败")

@@ -125,8 +125,6 @@ func (e *CommentDemandAssign) GetCommentDemandAssign(c *gin.Context) {
 	buf, _ := json.Marshal(object)
 	_ = json.Unmarshal(buf, &result)
 	result["snapshot"] = snapshot
-
-	log.Info("assign: ", result)
 	e.OK(c, result, "查看成功")
 }
 
