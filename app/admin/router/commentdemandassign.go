@@ -23,6 +23,7 @@ func registerCommentDemandAssignRouter(v1 *gin.RouterGroup, authMiddleware *jwt.
 		r.PUT("/:id", api.UpdateCommentDemandAssign)
 		r.DELETE("", api.DeleteCommentDemandAssign)
 		r.POST("/reject", api.Reject)
+		r.POST("/updateStatus", api.UpdateStatus)
 	}
 
 	i := v1.Group("/commentassignissue").Use(authMiddleware.MiddlewareFunc()).Use(middleware.AuthCheckRole(), actions.PermissionAction())

@@ -5,16 +5,18 @@ import (
 	"github.com/gin-gonic/gin"
 	"go-admin/app/admin/service"
 	common "go-admin/common/models"
+	"go-admin/constant"
 	"go-admin/pkg/service/mediaService"
 	"gorm.io/gorm"
 	"net/http"
+	"strconv"
 	"strings"
 
-	"go-admin/pkg/models"
 	"go-admin/app/admin/service/dto"
 	"go-admin/common/actions"
 	"go-admin/common/apis"
 	"go-admin/common/log"
+	"go-admin/pkg/models"
 	"go-admin/tools"
 )
 
@@ -230,4 +232,71 @@ func getMediaUrlByString(db *gorm.DB, mediaIdsStr string) (string, error) {
 		return "", err
 	}
 	return strings.Join(urlArr, ","), nil
+}
+
+type UpdateStatusRequest struct {
+	// 任务编号
+	// required: true
+	AssignSerial string `json:"assign_serial" binding:"required"`
+	// 媒体Id列表
+	MediaIds []int64 `json:"media_ids" binding:"required"`
+}
+
+func (e *CommentDemandAssign) UpdateStatus(c *gin.Context) {
+	req := &UpdateStatusRequest{}
+	if err := c.BindJSON(req); err != nil {
+		e.Error(c, http.StatusUnprocessableEntity, err, "参数错误")
+		return
+	}
+
+	db, err := tools.GetOrm(c)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	tx := db.Begin().Set("gorm:query_option", "FOR UPDATE")
+
+	//数据权限检查
+	p := actions.GetPermissionFromContext(c)
+	// 切换企业ID
+	de := &models.SysDept{DeptId: p.DeptId}
+	dept, _ := de.Get()
+	if dept.ParentId > 0 {
+		p.DeptId = dept.ParentId
+	}
+
+	// 先查询该记录是否还存在
+	var (
+		record = &models.CommentDemandAssign{}
+	)
+
+	if err := tx.Where("assign_serial=?", req.AssignSerial).First(record).Error; err != nil {
+		tx.Rollback()
+		e.Error(c, http.StatusUnprocessableEntity, err, "查询失败")
+		return
+	}
+
+	status, _ := strconv.Atoi(record.Status)
+	if status != constant.DemandAssignComment {
+		tx.Rollback()
+		e.Error(c, http.StatusUnprocessableEntity, err, "当前状态不可更新")
+		return
+	}
+
+	settleStatus := strconv.Itoa(constant.DemandAssignRewardSettle)
+	// 开始更新
+	mediaIdsBuf, _ := json.Marshal(req.MediaIds)
+	updates := map[string]interface{}{
+		"status":        settleStatus,
+		"settle_medias": string(mediaIdsBuf),
+	}
+
+	if err := tx.Model(&models.CommentDemandAssign{}).
+		Where("assign_serial=?", record.Serial).Updates(updates).Error; err != nil {
+		tx.Rollback()
+		e.Error(c, http.StatusUnprocessableEntity, err, "更新失败")
+		return
+	}
+	tx.Commit()
+	e.OK(c, record, "更新成功")
 }
