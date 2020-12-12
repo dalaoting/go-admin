@@ -121,7 +121,7 @@ func (s *CommentDemandAssignControl) GetId() interface{} {
 
 type CommentDemandAssignById struct {
 	dto.ObjectById
-	SerialNumber string `uri:"serialNumber"`
+	SerialNumber string `uri:"serial"`
 }
 
 func (s *CommentDemandAssignById) Generate() dto.Control {
