@@ -92,7 +92,7 @@ func (e *CommentDemandAssign) GetCommentDemandAssign(c *gin.Context) {
 
 	//数据权限检查
 	p := actions.GetPermissionFromContext(c)
-
+	//control = req.(*dto.CommentDemandAssignById)
 	serviceCommentDemandAssign := service.CommentDemandAssign{}
 	serviceCommentDemandAssign.MsgID = msgID
 	serviceCommentDemandAssign.Orm = db

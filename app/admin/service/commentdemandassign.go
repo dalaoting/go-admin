@@ -45,8 +45,8 @@ func (e *CommentDemandAssign) GetCommentDemandAssign(d cDto.Control, p *actions.
 	db := e.Orm.Model(&data).
 		Scopes(
 			actions.Permission(data.TableName(), p),
-		).
-		First(model, d.GetId())
+		).Where("assign_serial=?", d.GetId()).
+		First(model)
 	err = db.Error
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
 		err = errors.New("查看对象不存在或无权查看")

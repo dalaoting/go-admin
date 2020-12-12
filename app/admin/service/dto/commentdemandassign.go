@@ -121,6 +121,7 @@ func (s *CommentDemandAssignControl) GetId() interface{} {
 
 type CommentDemandAssignById struct {
 	dto.ObjectById
+	SerialNumber string `uri:"serialNumber"`
 }
 
 func (s *CommentDemandAssignById) Generate() dto.Control {
@@ -130,4 +131,8 @@ func (s *CommentDemandAssignById) Generate() dto.Control {
 
 func (s *CommentDemandAssignById) GenerateM() (common.ActiveRecord, error) {
 	return &models.CommentDemandAssign{}, nil
+}
+
+func (s *CommentDemandAssignById) GetId() interface{} {
+	return s.SerialNumber
 }
