@@ -23,6 +23,7 @@ func (e *CommentDemandAssign) GetAssignIssueList(c *gin.Context) {
 	db, err := tools.GetOrm(c)
 	if err != nil {
 		log.Error(err)
+		e.Error(c, http.StatusUnprocessableEntity, err, "服务异常")
 		return
 	}
 

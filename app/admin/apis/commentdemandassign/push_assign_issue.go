@@ -34,6 +34,7 @@ func (e *CommentDemandAssign) PushIssue(c *gin.Context) {
 	db, err := tools.GetOrm(c)
 	if err != nil {
 		log.Error(err)
+		e.Error(c, http.StatusUnprocessableEntity, err, "服务异常")
 		return
 	}
 
@@ -52,6 +53,7 @@ func (e *CommentDemandAssign) PushIssue(c *gin.Context) {
 	)
 
 	if err := db.Where("assign_serial=?", req.AssignSerial).First(record).Error; err != nil {
+		log.Error(err)
 		e.Error(c, http.StatusUnprocessableEntity, err, "查询失败")
 		return
 	}
@@ -75,6 +77,7 @@ func (e *CommentDemandAssign) PushIssue(c *gin.Context) {
 		UpdatedAt:    time.Now(),
 	}
 	if err := db.Save(issue).Error; err != nil {
+		log.Error(err)
 		e.Error(c, http.StatusUnprocessableEntity, err, "发送失败")
 		return
 	}

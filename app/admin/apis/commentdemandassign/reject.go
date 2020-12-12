@@ -29,6 +29,7 @@ func (e *CommentDemandAssign) Reject(c *gin.Context) {
 	db, err := tools.GetOrm(c)
 	if err != nil {
 		log.Error(err)
+		e.Error(c, http.StatusUnprocessableEntity, err, "服务异常")
 		return
 	}
 	tx := db.Begin().Set("gorm:query_option", "FOR UPDATE")
@@ -55,6 +56,7 @@ func (e *CommentDemandAssign) Reject(c *gin.Context) {
 		return
 	}
 	if db.Error != nil {
+		log.Error(err)
 		tx.Rollback()
 		log.Errorf("msgID[%s] db error:%s", msgID, err)
 		e.Error(c, http.StatusUnprocessableEntity, err, "查询失败")
@@ -74,6 +76,7 @@ func (e *CommentDemandAssign) Reject(c *gin.Context) {
 	}
 	data.TipsStatus = "1"
 	if err := tx.Save(data).Error; err != nil {
+		log.Error(err)
 		tx.Rollback()
 		e.Error(c, http.StatusUnprocessableEntity, err, "驳回失败")
 		return
