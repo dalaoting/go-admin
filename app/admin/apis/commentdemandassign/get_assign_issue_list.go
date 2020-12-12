@@ -41,7 +41,11 @@ func (e *CommentDemandAssign) GetAssignIssueList(c *gin.Context) {
 		count = int64(0)
 	)
 
-	if err := db.Debug().Where("assign_serial=? AND dept_id=?", req.AssignSerial, p.DeptId).
+	if p.DeptId != 1 {
+		db = db.Where("dept_id=?", p.DeptId)
+	}
+
+	if err := db.Debug().Where("assign_serial=?", req.AssignSerial).
 		Order("created_at DESC").Find(&list).Limit(-1).Offset(-1).Count(&count).Error; err != nil {
 		log.Error(err)
 	}
