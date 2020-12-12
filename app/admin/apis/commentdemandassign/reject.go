@@ -11,6 +11,7 @@ import (
 	"gorm.io/gorm"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 type RejectRequest struct {
@@ -35,7 +36,12 @@ func (e *CommentDemandAssign) Reject(c *gin.Context) {
 	msgID := tools.GenerateMsgIDFromContext(c)
 	//数据权限检查
 	p := actions.GetPermissionFromContext(c)
-
+	// 切换企业ID
+	de := &models.SysDept{DeptId: p.DeptId}
+	dept, _ := de.Get()
+	if dept.ParentId > 0 {
+		p.DeptId = dept.ParentId
+	}
 	var data models.CommentDemandAssign
 
 	err = tx.Model(&data).
@@ -74,5 +80,24 @@ func (e *CommentDemandAssign) Reject(c *gin.Context) {
 	}
 
 	// TODO 添加一句反馈消息
+	issue := models.AssignIssue{
+		Identity:     data.Commentator,
+		AssignSerial: req.AssignSerial,
+		DeptId:       p.DeptId,
+		Content:      "Your submission has been rejected：" + req.Remark,
+		ContentType:  1,
+		SendType:     2,
+		UserRead:     0,
+		DeptRead:     1,
+		CreatedAt:    time.Now(),
+		UpdatedAt:    time.Now(),
+	}
+	if err := tx.Save(issue).Error; err != nil {
+		tx.Rollback()
+		e.Error(c, http.StatusUnprocessableEntity, err, "发送失败")
+		return
+	}
 
+	tx.Commit()
+	e.OK(c, data.Serial, "驳回成功")
 }
