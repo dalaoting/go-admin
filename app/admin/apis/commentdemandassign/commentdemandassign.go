@@ -73,7 +73,10 @@ func (e *CommentDemandAssign) GetCommentDemandAssignList(c *gin.Context) {
 }
 
 func (e *CommentDemandAssign) GetCommentDemandAssign(c *gin.Context) {
-	control := new(dto.CommentDemandAssignById)
+	type R struct {
+		SerialNumber string `uri:"serial"`
+	}
+	control := new(R)
 	db, err := tools.GetOrm(c)
 	if err != nil {
 		log.Error(err)
@@ -82,8 +85,7 @@ func (e *CommentDemandAssign) GetCommentDemandAssign(c *gin.Context) {
 
 	msgID := tools.GenerateMsgIDFromContext(c)
 	//查看详情
-	req := control.Generate()
-	err = req.Bind(c)
+	err = c.ShouldBindUri(control)
 	if err != nil {
 		e.Error(c, http.StatusUnprocessableEntity, err, "参数验证失败")
 		return
@@ -92,8 +94,7 @@ func (e *CommentDemandAssign) GetCommentDemandAssign(c *gin.Context) {
 
 	//数据权限检查
 	p := actions.GetPermissionFromContext(c)
-	control = req.(*dto.CommentDemandAssignById)
-	log.Error(req, control)
+	log.Error(control)
 	serviceCommentDemandAssign := service.CommentDemandAssign{}
 	serviceCommentDemandAssign.MsgID = msgID
 	serviceCommentDemandAssign.Orm = db
