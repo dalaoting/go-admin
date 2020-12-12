@@ -93,10 +93,11 @@ func (e *CommentDemandAssign) GetCommentDemandAssign(c *gin.Context) {
 	//数据权限检查
 	p := actions.GetPermissionFromContext(c)
 	control = req.(*dto.CommentDemandAssignById)
+	log.Error(control)
 	serviceCommentDemandAssign := service.CommentDemandAssign{}
 	serviceCommentDemandAssign.MsgID = msgID
 	serviceCommentDemandAssign.Orm = db
-	err = serviceCommentDemandAssign.GetCommentDemandAssign(control, p, &object)
+	err = serviceCommentDemandAssign.GetCommentDemandAssign(control.SerialNumber, p, &object)
 	if err != nil {
 		e.Error(c, http.StatusUnprocessableEntity, err, "查询失败")
 		return

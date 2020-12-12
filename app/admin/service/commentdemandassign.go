@@ -37,7 +37,7 @@ func (e *CommentDemandAssign) GetCommentDemandAssignPage(c cDto.Index, p *action
 }
 
 // GetCommentDemandAssign 获取CommentDemandAssign对象
-func (e *CommentDemandAssign) GetCommentDemandAssign(d cDto.Control, p *actions.DataPermission, model *models.CommentDemandAssign) error {
+func (e *CommentDemandAssign) GetCommentDemandAssign(serialNumber string, p *actions.DataPermission, model *models.CommentDemandAssign) error {
 	var err error
 	var data models.CommentDemandAssign
 	msgID := e.MsgID
@@ -45,7 +45,7 @@ func (e *CommentDemandAssign) GetCommentDemandAssign(d cDto.Control, p *actions.
 	db := e.Orm.Model(&data).
 		Scopes(
 			actions.Permission(data.TableName(), p),
-		).Where("assign_serial=?", d.GetId()).
+		).Where("assign_serial=?", serialNumber).
 		First(model)
 	err = db.Error
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
