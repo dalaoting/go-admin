@@ -102,7 +102,30 @@ func (e *CommentDemandAssign) GetCommentDemandAssign(c *gin.Context) {
 		return
 	}
 
-	e.OK(c, object, "查看成功")
+	if object.OrderMedias != "" {
+		object.OrderMedias, err = getMediaUrlByString(db, object.OrderMedias)
+	}
+
+	if object.CommentMedias != "" {
+		object.CommentMedias, err = getMediaUrlByString(db, object.CommentMedias)
+	}
+
+	if object.SettleMedias != "" {
+		object.SettleMedias, err = getMediaUrlByString(db, object.SettleMedias)
+	}
+
+	var (
+		result   = make(map[string]interface{})
+		snapshot = &models.CommentDemandSnapshot{}
+	)
+
+	db.Where("serial_number=?", object.DemandSnapshotCode).First(snapshot)
+	buf, _ := json.Marshal(object)
+	_ = json.Unmarshal(buf, &result)
+	result["snapshot"] = snapshot
+
+	log.Info("assign: ", result)
+	e.OK(c, result, "查看成功")
 }
 
 func (e *CommentDemandAssign) InsertCommentDemandAssign(c *gin.Context) {
