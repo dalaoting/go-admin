@@ -85,7 +85,7 @@ func (e *CommentDemandAssign) Reject(c *gin.Context) {
 	deptId, _ := strconv.Atoi(data.DeptId)
 	issue := &models.AssignIssue{
 		Identity:     data.Commentator,
-		AssignSerial: req.AssignSerial,
+		AssignSerial: data.Serial,
 		DeptId:       deptId,
 		Content:      "Your submission has been rejected：" + req.Remark,
 		ContentType:  1,
@@ -95,7 +95,7 @@ func (e *CommentDemandAssign) Reject(c *gin.Context) {
 		CreatedAt:    time.Now(),
 		UpdatedAt:    time.Now(),
 	}
-	if err := tx.Save(issue).Error; err != nil {
+	if err := tx.Debug().Save(issue).Error; err != nil {
 		tx.Rollback()
 		e.Error(c, http.StatusUnprocessableEntity, err, "发送失败")
 		return

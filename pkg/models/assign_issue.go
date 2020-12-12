@@ -3,7 +3,7 @@ package models
 import "time"
 
 type AssignIssue struct {
-	ID           uint   `gorm:"primary_key;column:id;AUTO_INCREMENT" json:"-"`
+	ID           int64  `gorm:"primary_key;column:id;AUTO_INCREMENT" json:"-"`
 	Identity     string `gorm:"column:identity" json:"identity"`          // 用户id
 	AssignSerial string `gorm:"column:assign_serial" json:"assignSerial"` // 任务编号
 	DeptId       int    `gorm:"column:dept_id" json:"deptId"`             // 商家ID
