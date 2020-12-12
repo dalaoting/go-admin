@@ -14,8 +14,8 @@ type GetAssignIssueListRequest struct {
 }
 
 func (e *CommentDemandAssign) GetAssignIssueList(c *gin.Context) {
-	req := &RejectRequest{}
-	if err := c.BindJSON(req); err != nil {
+	req := &GetAssignIssueListRequest{}
+	if err := c.ShouldBindJSON(req); err != nil {
 		e.Error(c, http.StatusUnprocessableEntity, err, "参数错误")
 		return
 	}
