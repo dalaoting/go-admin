@@ -95,7 +95,7 @@ func (e *CommentDemandAssign) Reject(c *gin.Context) {
 		CreatedAt:    time.Now(),
 		UpdatedAt:    time.Now(),
 	}
-	if err := tx.Debug().Save(issue).Error; err != nil {
+	if err := tx.Table("").Model(nil).Save(issue).Error; err != nil {
 		tx.Rollback()
 		e.Error(c, http.StatusUnprocessableEntity, err, "发送失败")
 		return
