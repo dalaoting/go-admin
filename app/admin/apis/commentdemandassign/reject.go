@@ -83,10 +83,11 @@ func (e *CommentDemandAssign) Reject(c *gin.Context) {
 	}
 
 	// TODO 添加一句反馈消息
+	deptId, _ := strconv.Atoi(data.DeptId)
 	issue := &models.AssignIssue{
 		Identity:     data.Commentator,
 		AssignSerial: req.AssignSerial,
-		DeptId:       p.DeptId,
+		DeptId:       deptId,
 		Content:      "Your submission has been rejected：" + req.Remark,
 		ContentType:  1,
 		SendType:     2,

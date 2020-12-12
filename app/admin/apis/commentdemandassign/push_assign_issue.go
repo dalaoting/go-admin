@@ -60,14 +60,14 @@ func (e *CommentDemandAssign) PushIssue(c *gin.Context) {
 
 	status, _ := strconv.Atoi(record.Status)
 	if status == constant.DemandAssignCancel || status == constant.DemandAssignFinish || status == constant.DemandAssignRefund {
-		e.Error(c, http.StatusUnprocessableEntity, err, "当前状态已不可以提交工单")
+		e.Error(c, http.StatusUnprocessableEntity, nil, "当前状态已不可以提交工单")
 		return
 	}
-
+	deptId, _ := strconv.Atoi(record.DeptId)
 	issue := &models.AssignIssue{
 		Identity:     record.Commentator,
 		AssignSerial: req.AssignSerial,
-		DeptId:       p.DeptId,
+		DeptId:       deptId,
 		Content:      req.Content,
 		ContentType:  req.ContentType,
 		SendType:     2,
