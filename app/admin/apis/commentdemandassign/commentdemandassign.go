@@ -299,18 +299,26 @@ func (e *CommentDemandAssign) UpdateStatus(c *gin.Context) {
 	}
 
 	status, _ := strconv.Atoi(record.Status)
-	if status != constant.DemandAssignComment {
+	if status != constant.DemandAssignComment && status != constant.DemandAssignOrderSettle {
 		tx.Rollback()
 		e.Error(c, http.StatusUnprocessableEntity, err, "当前状态不可更新")
 		return
 	}
 
-	settleStatus := strconv.Itoa(constant.DemandAssignRewardSettle)
-	// 开始更新
-	mediaIdsBuf, _ := json.Marshal(req.MediaIds)
+	if status == constant.DemandAssignComment {
+		record.Status = strconv.Itoa(constant.DemandAssignOrderSettle)
+		mediaIdsBuf, _ := json.Marshal(req.MediaIds)
 
-	record.Status = settleStatus
-	record.SettleMedias = string(mediaIdsBuf)
+		record.SettleMedias = string(mediaIdsBuf)
+	} else {
+		record.Status = strconv.Itoa(constant.DemandAssignRewardSettle)
+		mediaIds := make([]int64, 0)
+		_ = json.Unmarshal([]byte(record.SettleMedias), &mediaIds)
+		mediaIds = append(mediaIds, req.MediaIds...)
+		buf, _ := json.Marshal(mediaIds)
+		record.SettleMedias = string(buf)
+	}
+	// 开始更新
 	if err := tx.Save(record).Error; err != nil {
 		tx.Rollback()
 		e.Error(c, http.StatusUnprocessableEntity, err, "更新失败")
