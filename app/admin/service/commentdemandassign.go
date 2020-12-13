@@ -25,7 +25,7 @@ func (e *CommentDemandAssign) GetCommentDemandAssignPage(c cDto.Index, p *action
 		Scopes(
 			cDto.MakeCondition(c.GetNeedSearch()),
 			cDto.Paginate(c.GetPageSize(), c.GetPageIndex()),
-			actions.PermissionDeptId(data.TableName(), p),
+			//actions.PermissionDeptId(data.TableName(), p),
 		).
 		Find(list).Limit(-1).Offset(-1).
 		Count(count).Error
