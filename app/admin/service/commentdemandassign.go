@@ -25,7 +25,7 @@ func (e *CommentDemandAssign) GetCommentDemandAssignPage(c cDto.Index, p *action
 		Scopes(
 			cDto.MakeCondition(c.GetNeedSearch()),
 			cDto.Paginate(c.GetPageSize(), c.GetPageIndex()),
-			//actions.PermissionDeptId(data.TableName(), p),
+			actions.PermissionDeptId(data.TableName(), p),
 		).
 		Find(list).Limit(-1).Offset(-1).
 		Count(count).Error
@@ -43,6 +43,9 @@ func (e *CommentDemandAssign) GetCommentDemandAssign(serialNumber string, p *act
 	msgID := e.MsgID
 
 	db := e.Orm.Model(&data).
+		Scopes(
+			actions.PermissionDeptId(data.TableName(), p),
+		).
 		Where("assign_serial=?", serialNumber).
 		First(model)
 	err = db.Error
