@@ -6,11 +6,11 @@ import (
 	common "go-admin/common/models"
 	"net/http"
 
-	"go-admin/pkg/models"
 	"go-admin/app/admin/service/dto"
 	"go-admin/common/actions"
 	"go-admin/common/apis"
 	"go-admin/common/log"
+	"go-admin/pkg/models"
 	"go-admin/tools"
 )
 
@@ -21,7 +21,7 @@ type CommentAccount struct {
 func (e *CommentAccount) GetCommentAccountList(c *gin.Context) {
 	msgID := tools.GenerateMsgIDFromContext(c)
 	d := new(dto.CommentAccountSearch)
-	db, err := tools.GetOrm(c)
+	db, err := e.GetOrm(c)
 	if err != nil {
 		log.Error(err)
 		return

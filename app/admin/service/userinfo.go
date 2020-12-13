@@ -2,12 +2,12 @@ package service
 
 import (
 	"errors"
-	"go-admin/pkg/models"
 	"go-admin/common/actions"
 	cDto "go-admin/common/dto"
 	"go-admin/common/log"
 	common "go-admin/common/models"
 	"go-admin/common/service"
+	"go-admin/pkg/models"
 	"gorm.io/gorm"
 )
 
@@ -25,7 +25,7 @@ func (e *UserInfo) GetUserInfoPage(c cDto.Index, p *actions.DataPermission, list
 		Scopes(
 			cDto.MakeCondition(c.GetNeedSearch()),
 			cDto.Paginate(c.GetPageSize(), c.GetPageIndex()),
-			actions.Permission(data.TableName(), p),
+			//actions.Permission(data.TableName(), p),
 		).
 		Find(list).Limit(-1).Offset(-1).
 		Count(count).Error
@@ -43,9 +43,9 @@ func (e *UserInfo) GetUserInfo(d cDto.Control, p *actions.DataPermission, model 
 	msgID := e.MsgID
 
 	db := e.Orm.Model(&data).
-		Scopes(
-			actions.Permission(data.TableName(), p),
-		).
+		//Scopes(
+		//	actions.Permission(data.TableName(), p),
+		//).
 		First(model, d.GetId())
 	err = db.Error
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
