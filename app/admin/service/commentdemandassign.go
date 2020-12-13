@@ -43,9 +43,7 @@ func (e *CommentDemandAssign) GetCommentDemandAssign(serialNumber string, p *act
 	msgID := e.MsgID
 
 	db := e.Orm.Model(&data).
-		Scopes(
-			actions.Permission(data.TableName(), p),
-		).Where("assign_serial=?", serialNumber).
+		Where("assign_serial=?", serialNumber).
 		First(model)
 	err = db.Error
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {

@@ -82,5 +82,11 @@ func (e *CommentDemandAssign) PushIssue(c *gin.Context) {
 		return
 	}
 
+	record.TipsStatus = "1"
+	if err := db.Debug().Save(record).Error; err != nil {
+		log.Error(err)
+		e.Error(c, http.StatusUnprocessableEntity, err, "发送失败")
+		return
+	}
 	e.OK(c, issue.ID, "发送成功")
 }
