@@ -198,7 +198,7 @@ func (e *SysUser) GetList() (SysUserView []SysUserView, err error) {
 
 func (e *SysUser) GetPage(pageSize int, pageIndex int) ([]SysUserPage, int, error) {
 	var doc []SysUserPage
-	table := orm.Eloquent.Select("sys_user.*,sys_dept.dept_name").Table(e.TableName())
+	table := orm.Eloquent.Select("sys_user.*,sys_dept.dept_name deptName").Table(e.TableName())
 	table = table.Joins("left join sys_dept on sys_dept.dept_id = sys_user.dept_id")
 
 	if e.Username != "" {
