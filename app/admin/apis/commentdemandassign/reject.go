@@ -47,7 +47,7 @@ func (e *CommentDemandAssign) Reject(c *gin.Context) {
 
 	err = tx.Model(&data).
 		Scopes(
-			actions.Permission(data.TableName(), p),
+			actions.PermissionDeptId(data.TableName(), p),
 		).Where("assign_serial=?", req.AssignSerial).First(&data).Error
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
 		tx.Rollback()
