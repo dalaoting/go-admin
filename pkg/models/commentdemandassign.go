@@ -18,6 +18,7 @@ type CommentDemandAssign struct {
 	CommentName        string `json:"commentName" gorm:"type:varchar(32);comment:测评账号名称"`              //
 	Status             string `json:"status" gorm:"type:int;comment:状态"`                               //
 	TipsStatus         string `json:"tipsStatus" gorm:"type:int;comment:提示"`                           //
+	MerchantTipsStatus string `json:"merchantTipsStatus" gorm:"type:int;comment:提示"`                   //
 	IncomeAccount      string `json:"incomeAccount" gorm:"type:varchar(64);comment:收款账号"`              //
 	IncomeType         string `json:"incomeType" gorm:"type:int;comment:收款类型"`                         //
 	IncomeName         string `json:"incomeName" gorm:"type:varchar(64);comment:收款名称"`                 //

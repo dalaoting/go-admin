@@ -50,5 +50,7 @@ func (e *CommentDemandAssign) GetAssignIssueList(c *gin.Context) {
 		log.Error(err)
 	}
 
+	db.Table("comment_demand_assign").Where("assign_serial=?", req.AssignSerial).Update("merchant_tips_status", 0)
+
 	e.PageOK(c, list, int(count), 0, 0, "查询成功")
 }
