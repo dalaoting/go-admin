@@ -14,6 +14,7 @@ type CommentDemand struct {
 	SerialNumber string `json:"serialNumber" gorm:"type:varchar(64);comment:编号"` //
 	CustomerId   string `json:"customerId" gorm:"type:bigint;comment:客户"`        //
 	Title        string `json:"title" gorm:"type:varchar(128);comment:标题"`       //
+	ShopName     string `json:"shopName" gorm:"type:varchar(128);comment:店铺名"`   //
 	ProductCode  string `json:"productCode" gorm:"type:varchar(32);comment:商品码"` //
 	Reward       string `json:"reward" gorm:"type:int;comment:佣金(分)"`            //
 	ProductPrice string `json:"productPrice" gorm:"type:int;comment:价格"`         //
