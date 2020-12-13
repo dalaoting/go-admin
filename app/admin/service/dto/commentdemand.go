@@ -93,6 +93,7 @@ func (s *CommentDemandControl) GenerateM() (common.ActiveRecord, error) {
 		SerialNumber: s.SerialNumber,
 		CustomerId:   s.CustomerId,
 		Title:        s.Title,
+		ShopName:     s.ShopName,
 		ProductCode:  s.ProductCode,
 		Reward:       s.Reward,
 		ProductPrice: s.ProductPrice,
