@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"strings"
 	"time"
 
@@ -111,40 +110,40 @@ func SetDBOperLog(c *gin.Context, clientIP string, statusCode int, reqUri string
 }
 
 // 统一打印http请求日志
-func Logger(noLog ...string) func(c *gin.Context) {
-	noLogMap := make(map[string]struct{})
-	for _, nl := range noLog {
-		noLogMap[nl] = struct{}{}
-	}
-
-	return func(c *gin.Context) {
-		if _, ok := noLogMap[c.Request.URL.String()]; ok {
-			return
-		}
-		now := time.Now()
-
-		c.Next()
-
-		h := Default(c)
-		body := ""
-		if "/v1/media/upload" != c.Request.URL.String() {
-			body = h.GetRawData()
-		}
-		entry := logrus.Fields{
-			"requestId": h.GetRequestId(),
-			"header":    c.Request.Header,
-			"url":       c.Request.URL.String(),
-			"body":      body,
-			"response":  h.GetResponse(),
-			"ttl":       time.Since(now).String(),
-		}
-
-		err := c.Errors.Last()
-		if err != nil && err.Type > 0 {
-			logrus.WithFields(entry).Error(err.Error())
-			return
-		}
-
-		logrus.WithFields(entry).Info()
-	}
-}
+//func Logger(noLog ...string) func(c *gin.Context) {
+//	noLogMap := make(map[string]struct{})
+//	for _, nl := range noLog {
+//		noLogMap[nl] = struct{}{}
+//	}
+//
+//	return func(c *gin.Context) {
+//		if _, ok := noLogMap[c.Request.URL.String()]; ok {
+//			return
+//		}
+//		now := time.Now()
+//
+//		c.Next()
+//
+//		h := Default(c)
+//		body := ""
+//		if "/v1/media/upload" != c.Request.URL.String() {
+//			body = h.GetRawData()
+//		}
+//		entry := logrus.Fields{
+//			"requestId": h.GetRequestId(),
+//			"header":    c.Request.Header,
+//			"url":       c.Request.URL.String(),
+//			"body":      body,
+//			"response":  h.GetResponse(),
+//			"ttl":       time.Since(now).String(),
+//		}
+//
+//		err := c.Errors.Last()
+//		if err != nil && err.Type > 0 {
+//			logrus.WithFields(entry).Error(err.Error())
+//			return
+//		}
+//
+//		logrus.WithFields(entry).Info()
+//	}
+//}
