@@ -39,31 +39,20 @@ func (m *CommentDemandSearch) Generate() dto.Index {
 }
 
 type CommentDemandControl struct {
-	ID uint `uri:"ID" comment:""` //
-
-	DeptId string `json:"deptId" comment:"企业"`
-
+	ID           uint   `uri:"ID" comment:""` //
+	DeptId       string `json:"deptId" comment:"企业"`
 	SerialNumber string `json:"serialNumber" comment:"编号"`
-
-	ShopName string `json:"shopName" comment:"店铺名"`
-
-	CustomerId string `json:"customerId" comment:"客户"`
-
-	Title string `json:"title" comment:"标题"`
-
-	ProductCode string `json:"productCode" comment:"商品码"`
-
-	Reward string `json:"reward" comment:"佣金(分)"`
-
+	ShopName     string `json:"shopName" comment:"店铺名"`
+	CustomerId   string `json:"customerId" comment:"客户"`
+	Title        string `json:"title" comment:"标题"`
+	ProductCode  string `json:"productCode" comment:"商品码"`
+	Reward       string `json:"reward" comment:"佣金(分)"`
 	ProductPrice string `json:"productPrice" comment:"价格"`
-
-	CommentNum string `json:"commentNum" comment:"测评数"`
-
-	Desc string `json:"desc" comment:"说明"`
-
-	Remark string `json:"remark" comment:"备注"`
-
-	Status string `json:"status" comment:"状态"`
+	CommentNum   string `json:"commentNum" comment:"测评数"`
+	Desc         string `json:"desc" comment:"说明"`
+	Remark       string `json:"remark" comment:"备注"`
+	Status       string `json:"status" comment:"状态"`
+	DemandPrice  int64  `json:"demandPrice,string" comment:"需求总费用"`
 }
 
 func (s *CommentDemandControl) Bind(ctx *gin.Context) error {

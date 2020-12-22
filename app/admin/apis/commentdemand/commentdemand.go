@@ -1,10 +1,12 @@
 package commentdemand
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"go-admin/app/admin/service"
 	common "go-admin/common/models"
 	"go-admin/pkg/constant"
+	"go-admin/pkg/service/customerService"
 	"go-admin/pkg/uuid"
 	"net/http"
 	"strconv"
@@ -126,6 +128,7 @@ func (e *CommentDemand) InsertCommentDemand(c *gin.Context) {
 		log.Error(err)
 		return
 	}
+	tx := db.Begin().Set("gorm:query_option", "FOR UPDATE")
 	//数据权限检查
 	p := actions.GetPermissionFromContext(c)
 	control.DeptId = strconv.Itoa(p.DeptId)
@@ -144,12 +147,14 @@ func (e *CommentDemand) InsertCommentDemand(c *gin.Context) {
 	req := control.Generate()
 	err = req.Bind(c)
 	if err != nil {
+		tx.Rollback()
 		e.Error(c, http.StatusUnprocessableEntity, err, "参数验证失败")
 		return
 	}
 	var object common.ActiveRecord
 	object, err = req.GenerateM()
 	if err != nil {
+		tx.Rollback()
 		e.Error(c, http.StatusInternalServerError, err, "模型生成失败")
 		return
 	}
@@ -157,10 +162,30 @@ func (e *CommentDemand) InsertCommentDemand(c *gin.Context) {
 	object.SetCreateBy(tools.GetUserIdUint(c))
 
 	serviceCommentDemand := service.CommentDemand{}
-	serviceCommentDemand.Orm = db
+	serviceCommentDemand.Orm = tx
 	serviceCommentDemand.MsgID = msgID
 	err = serviceCommentDemand.InsertCommentDemand(object)
 	if err != nil {
+		tx.Rollback()
+		log.Error(err)
+		e.Error(c, http.StatusInternalServerError, err, "创建失败")
+		return
+	}
+
+	// 开始扣款
+	demandControl := req.(*dto.CommentDemandControl)
+	customerId, _ := strconv.Atoi(demandControl.CustomerId)
+	tx = tx.Model(nil).Table("")
+	if err = customerService.OperateCustomerWithTx(tx, &models.CustomerOperation{
+		CustomerId: customerId,
+		Amount:     demandControl.DemandPrice,
+		OpType:     models.OpTypeSub,
+		BsType:     models.BsTypeDemand,
+		Detail:     "添加测评需求",
+		Ext:        fmt.Sprintf("%v", object.GetId()),
+		CreateBy:   tools.GetUserIdUint(c),
+	}); err != nil {
+		tx.Rollback()
 		log.Error(err)
 		e.Error(c, http.StatusInternalServerError, err, "创建失败")
 		return

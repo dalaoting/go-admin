@@ -20,6 +20,7 @@ const (
 
 const (
 	BsTypeRecharge = 1000 // 充值
+	BsTypeDemand   = 1001 // 添加需求
 	BSTypeAdmin    = 2006 // 管理后台操作
 )
 
@@ -35,7 +36,7 @@ type CustomerOperation struct {
 	BsType     int
 	Detail     string
 	Ext        string
-	CreateBy  uint
+	CreateBy   uint
 }
 
 func (e *CustomerOperation) Key() string {
