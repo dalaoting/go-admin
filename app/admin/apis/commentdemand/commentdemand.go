@@ -175,10 +175,11 @@ func (e *CommentDemand) InsertCommentDemand(c *gin.Context) {
 	// 开始扣款
 	demandControl := req.(*dto.CommentDemandControl)
 	customerId, _ := strconv.Atoi(demandControl.CustomerId)
+	demandPrice, _ := strconv.ParseInt(demandControl.DemandPrice, 10, 64)
 	tx = tx.Model(nil).Table("")
 	if err = customerService.OperateCustomerWithTx(tx, &models.CustomerOperation{
 		CustomerId: customerId,
-		Amount:     demandControl.DemandPrice,
+		Amount:     demandPrice,
 		OpType:     models.OpTypeSub,
 		BsType:     models.BsTypeDemand,
 		Detail:     "添加测评需求",

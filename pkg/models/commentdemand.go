@@ -18,6 +18,7 @@ type CommentDemand struct {
 	ProductCode  string `json:"productCode" gorm:"type:varchar(32);comment:商品码"` //
 	Reward       string `json:"reward" gorm:"type:int;comment:佣金(分)"`            //
 	ProductPrice string `json:"productPrice" gorm:"type:int;comment:价格"`         //
+	DemandPrice  string `json:"demandPrice" gorm:"type:int;comment:需求总费用"`       //
 	CommentNum   string `json:"commentNum" gorm:"type:int;comment:测评数"`          //
 	Desc         string `json:"desc" gorm:"type:varchar(255);comment:说明"`        //
 	Remark       string `json:"remark" gorm:"type:varchar(255);comment:备注"`      //

@@ -52,7 +52,7 @@ type CommentDemandControl struct {
 	Desc         string `json:"desc" comment:"说明"`
 	Remark       string `json:"remark" comment:"备注"`
 	Status       string `json:"status" comment:"状态"`
-	DemandPrice  int64  `json:"demandPrice,string" comment:"需求总费用"`
+	DemandPrice  string `json:"demandPrice" comment:"需求总费用"`
 }
 
 func (s *CommentDemandControl) Bind(ctx *gin.Context) error {
@@ -90,6 +90,7 @@ func (s *CommentDemandControl) GenerateM() (common.ActiveRecord, error) {
 		Desc:         s.Desc,
 		Remark:       s.Remark,
 		Status:       s.Status,
+		DemandPrice:  s.DemandPrice,
 	}, nil
 }
 
