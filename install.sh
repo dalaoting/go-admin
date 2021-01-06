@@ -1,5 +1,7 @@
 #!/bin/bash
 
+BIN=$1
+
 echo "开始构建 go-admin"
 go build
 echo "构建完成"
@@ -17,4 +19,4 @@ cd $MV_TAR
 mv go-admin go-admin-bak
 rm -rf ./config
 tar -zxvf $TAR_FILE
-sh restart.sh go-admin
+sh restart.sh $BIN

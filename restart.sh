@@ -1,5 +1,7 @@
 #!/bin/bash
 
+RUNMODE=$1
+
 PRONAME="go-admin"
 
 BIN=/usr/local/go-admin/api/$PRONAME
@@ -30,7 +32,7 @@ do
 
                 NOW=$(date +%Y-%m-%d,%H:%m:%s)
                 #nohup $BIN > $STDLOG 2>&1 &
-                nohup $BIN server -c config/settings-test.yml > "/data/logs/$PRONAME/output.$NOW" 2>&1 &
+                nohup $BIN server -c "config/settings-$RUNMODE.yml" > "/data/logs/$PRONAME/output.$NOW" 2>&1 &
                 break
         fi
 done
