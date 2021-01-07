@@ -97,7 +97,7 @@ func (e *Media) UploadFile(c *gin.Context) {
 		return
 	}
 
-	path := "https://rt.oldthree.cn" + "/" + objKey
+	path := "https://op.rteamcloud.com" + "/" + objKey
 
 	// 保存媒体文件
 	media := &models.Media{
