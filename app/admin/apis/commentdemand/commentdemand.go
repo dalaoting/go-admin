@@ -192,6 +192,7 @@ func (e *CommentDemand) InsertCommentDemand(c *gin.Context) {
 		return
 	}
 
+	tx.Commit()
 	e.OK(c, object.GetId(), "创建成功")
 }
 
